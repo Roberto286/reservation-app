@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import * as bcrypt from "bcrypt";
 import { Model } from "mongoose";
 import { User, UserDocument } from "src/schemas/user.schema";
-import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -10,8 +10,8 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>
   ) {}
 
-  async findByUsername(username: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ username }).exec();
+  async findByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email }).exec();
   }
 
   async createUser(email: string, password: string): Promise<UserDocument> {

@@ -6,7 +6,7 @@ export class User {
   @Prop({ lowercase: true, unique: true })
   email: string;
 
-  @Prop({ select: false })
+  @Prop()
   password: string;
 }
 export type UserDocument = HydratedDocument<User>;
