@@ -4,29 +4,28 @@ import { InputComponent } from '../input-component/input-component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login-form',
+  selector: 'app-authentication-form',
   imports: [ReactiveFormsModule, InputComponent, CommonModule],
-  templateUrl: './login-form.html',
-  styleUrl: './login-form.css',
+  templateUrl: './authentication-form.html',
+  styleUrl: './authentication-form.css',
 })
-export class LoginForm {
+export class AuthenticationForm {
   errorMessage = '';
-  loginForm: FormGroup<{
+  form: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl<string | null>;
   }>;
 
   constructor(private readonly fb: FormBuilder) {
-    this.loginForm = this.fb.group({
+    this.form = this.fb.group({
       email: '',
       password: '',
     });
   }
 
   submit() {
-    if (this.loginForm.valid) {
-      // Handle login logic here
-      console.log('Form Submitted', this.loginForm.value);
+    if (this.form.valid) {
+      console.log('Form Submitted', this.form.value);
     } else {
       this.errorMessage = 'Please fill in all required fields.';
     }

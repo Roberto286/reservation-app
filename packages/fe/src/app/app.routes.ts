@@ -3,6 +3,9 @@ import type { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./components/login-form/login-form').then((m) => m.LoginForm),
+    loadComponent: () =>
+      import('./components/authentication-form/authentication-form').then(
+        (m) => m.AuthenticationForm
+      ),
   },
 ];

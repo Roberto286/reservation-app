@@ -1,0 +1,30 @@
+<div
+  class="login-container p-5 w-1/4 rounded-lg border-base-300 shadow-2xl min-h-96 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"
+>
+  <h2>Accedi</h2>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="flex flex-col items-center w-full gap-3 flex-1 justify-center"
+  >
+    <app-input-component
+      class="w-full"
+      type="email"
+      label="Email"
+      formControlName="email"
+    ></app-input-component>
+
+    <app-input-component
+      class="w-full"
+      type="password"
+      label="Password"
+      formControlName="password"
+    ></app-input-component>
+
+    <button class="btn btn-primary w-full" type="submit" [disabled]="form.invalid">Login</button>
+
+    @if (errorMessage) {
+    <div class="error" [textContent]="errorMessage"></div>
+    }
+  </form>
+</div>
