@@ -32,6 +32,9 @@ importers:
       daisyui:
         specifier: ^5.5.3
         version: 5.5.3
+      ngx-cookie-service:
+        specifier: ^21.1.0
+        version: 21.1.0(@angular/common@20.3.11(@angular/core@20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2))
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -2306,6 +2309,12 @@ packages:
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
+
+  ngx-cookie-service@21.1.0:
+    resolution: {integrity: sha512-W3IsoMImUVNt0ZuMesEuQJUGrEgKJaPkQGGfCg7zjUGM/EaeAIbIkfNktNIgUDmeUYapZQJa2pSg4YuK4v1gVQ==}
+    peerDependencies:
+      '@angular/common': ^21.0.0
+      '@angular/core': ^21.0.0
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -5234,6 +5243,12 @@ snapshots:
   negotiator@0.6.3: {}
 
   negotiator@1.0.0: {}
+
+  ngx-cookie-service@21.1.0(@angular/common@20.3.11(@angular/core@20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2)):
+    dependencies:
+      '@angular/common': 20.3.11(@angular/core@20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2))(rxjs@7.8.2)
+      '@angular/core': 20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2)
+      tslib: 2.8.1
 
   node-addon-api@6.1.0:
     optional: true

@@ -37,8 +37,8 @@
     <div class="error" [textContent]="errorMessage"></div>
     }
     <div class="text-sm w-full text-end">
-      @if (!isSigningUp) {Hai già un account} @else {Non hai un account}?
-      <a class="link link-primary" (click)="toggleSignUp()">
+      @if (!isSigningUp) {Non hai un account} @else {Hai già un account}?
+      <a class="link link-primary" [routerLink]="isSigningUp ? '/login' : '/signup'">
         @if (!isSigningUp) { Registrati } @else { Accedi }
       </a>
     </div>
