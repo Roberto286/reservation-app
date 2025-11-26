@@ -150,6 +150,9 @@ importers:
       daisyui:
         specifier: ^5.5.3
         version: 5.5.3
+      ngx-cookie-service:
+        specifier: ^21.1.0
+        version: 21.1.0(@angular/common@20.3.11)(@angular/core@20.3.11)
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -7505,6 +7508,17 @@ packages:
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
+
+  /ngx-cookie-service@21.1.0(@angular/common@20.3.11)(@angular/core@20.3.11):
+    resolution: {integrity: sha512-W3IsoMImUVNt0ZuMesEuQJUGrEgKJaPkQGGfCg7zjUGM/EaeAIbIkfNktNIgUDmeUYapZQJa2pSg4YuK4v1gVQ==}
+    peerDependencies:
+      '@angular/common': ^21.0.0
+      '@angular/core': ^21.0.0
+    dependencies:
+      '@angular/common': 20.3.11(@angular/core@20.3.11)(rxjs@7.8.2)
+      '@angular/core': 20.3.11(@angular/compiler@20.3.11)(rxjs@7.8.2)
+      tslib: 2.8.1
+    dev: false
 
   /node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
