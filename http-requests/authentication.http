@@ -1,0 +1,18 @@
+## Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "roberto@example.com",
+  "password": "pippo"
+} 
+
+###
+
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+  "email": "roberto2@example.com",
+  "password": "pippo"
+}
