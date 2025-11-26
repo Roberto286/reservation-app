@@ -1,0 +1,17 @@
+@if (type === 'email') {
+<app-input-email
+  [value]="value"
+  [disabled]="disabled"
+  [label]="label"
+  (valueChange)="onInput($event)"
+  (blur)="onBlur()"
+></app-input-email>
+} @else if(type === 'password') {
+<app-input-password
+  [value]="value"
+  [disabled]="disabled"
+  [label]="label"
+  (valueChange)="onInput($event)"
+  (blur)="onBlur()"
+></app-input-password>
+}
