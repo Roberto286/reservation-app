@@ -15,6 +15,7 @@
     [disabled]="disabled"
     [label]="label"
     (valueChange)="onInput($event)"
+    [placeholder]="placeholder ? placeholder : 'Password'"
     (blur)="onBlur()"
   ></app-input-password>
   }

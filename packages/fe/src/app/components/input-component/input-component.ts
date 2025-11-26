@@ -21,6 +21,7 @@ export type InputType = 'text' | 'password' | 'email' | 'number' | 'date';
 export class InputComponent implements ControlValueAccessor {
   @Input() type!: InputType;
   @Input() label!: string;
+  @Input() placeholder = '';
 
   value = '';
   disabled = false;

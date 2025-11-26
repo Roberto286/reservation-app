@@ -1,7 +1,7 @@
 <div
   class="login-container p-5 w-1/4 rounded-lg border-base-300 shadow-2xl min-h-96 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"
 >
-  <h2>Accedi</h2>
+  <h2>Autenticazione</h2>
   <form
     [formGroup]="form"
     (ngSubmit)="submit()"
@@ -21,10 +21,26 @@
       formControlName="password"
     ></app-input-component>
 
+    @if(isSigningUp) {
+    <app-input-component
+      class="w-full"
+      type="password"
+      label="Conferma Password"
+      formControlName="confirmPassword"
+      [placeholder]="'Conferma Password'"
+    ></app-input-component>
+    }
+
     <button class="btn btn-primary w-full" type="submit" [disabled]="form.invalid">Login</button>
 
     @if (errorMessage) {
     <div class="error" [textContent]="errorMessage"></div>
     }
+    <div class="text-sm w-full text-end">
+      @if (!isSigningUp) {Hai già un account} @else {Non hai un account}?
+      <a class="link link-primary" (click)="toggleSignUp()">
+        @if (!isSigningUp) { Registrati } @else { Accedi }
+      </a>
+    </div>
   </form>
 </div>

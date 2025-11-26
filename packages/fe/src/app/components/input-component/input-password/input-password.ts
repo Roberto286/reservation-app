@@ -10,6 +10,7 @@ export class InputPassword {
   @Input() label!: string;
   @Input() value = '';
   @Input() disabled = false;
+  @Input() placeholder = 'Password';
   @Output() valueChange = new EventEmitter<Event>();
   @Output() blur = new EventEmitter<void>();
 }
