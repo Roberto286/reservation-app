@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: node:24-alpine
+    container_name: fe
+    working_dir: /app
+    volumes:
+      - ./packages/fe:/app
+      - /app/node_modules
+    ports:
+      - "4201:4200"
+    command: sh -c "corepack enable && pnpm install && pnpm run start:dev"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+
+  backend:
+    image: node:24-alpine
+    container_name: nest-app
+    working_dir: /app
+    volumes:
+      - ./packages/be:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: sh -c "corepack enable && pnpm install && pnpm run start:dev"
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  mongodb_data:

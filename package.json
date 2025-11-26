@@ -1,0 +1,10 @@
+{
+  "packageManager": "pnpm@8.14.1",
+  "devDependencies": {
+    "turbo": "^2.6.1"
+  },
+  "scripts": {
+    "start:dev": "turbo run start:dev",
+    "start:docker": "docker compose up -d"
+  }
+}
