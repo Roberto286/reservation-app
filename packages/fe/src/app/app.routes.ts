@@ -12,7 +12,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard').then((d) => d.Dashboard),
+    loadComponent: () => import('./pages/dashboard/dashboard').then((d) => d.Dashboard),
     canActivate: [authGuard],
   },
   { path: 'logout', loadComponent: () => import('./pages/logout').then((l) => l.Logout) },

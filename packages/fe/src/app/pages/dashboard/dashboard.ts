@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { EventCategory, GetEventsDto } from '@reservation-app/shared';
-import { EventsMenu } from '../components/events-menu/events-menu';
+import { EventsMenu } from '../../components/events-menu/events-menu';
 
 @Component({
   selector: 'app-dashboard',
-  template: `<app-events-menu (categorySelected)="onCategorySelected($event)"></app-events-menu>`,
+  templateUrl: './dashboard.html',
   styles: [],
   imports: [EventsMenu],
 })
