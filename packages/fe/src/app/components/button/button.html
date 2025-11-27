@@ -1,9 +1,9 @@
 <button
   class="btn"
-  [ngClass]="buttonClasses"
-  [attr.type]="type"
-  [attr.aria-busy]="loading ? 'true' : null"
-  [disabled]="isDisabled"
+  [ngClass]="buttonClasses()"
+  [attr.type]="type()"
+  [attr.aria-busy]="loading() ? 'true' : null"
+  [disabled]="isDisabled()"
 >
   <ng-content></ng-content>
 </button>

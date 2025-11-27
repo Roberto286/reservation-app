@@ -1,5 +1,5 @@
-import { CommonModule, NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
 export type ButtonVariant =
   | 'primary'
@@ -25,13 +25,13 @@ export type ButtonType = 'button' | 'submit' | 'reset';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {
-  @Input() variant: ButtonVariant = 'primary';
-  @Input() size: ButtonSize = 'md';
-  @Input() outline = false;
-  @Input() fullWidth = false;
-  @Input() loading = false;
-  @Input() disabled = false;
-  @Input() type: ButtonType = 'button';
+  readonly variant = input<ButtonVariant>('primary');
+  readonly size = input<ButtonSize>('md');
+  readonly outline = input(false);
+  readonly fullWidth = input(false);
+  readonly loading = input(false);
+  readonly disabled = input(false);
+  readonly type = input<ButtonType>('button');
 
   private readonly variantClasses: Record<ButtonVariant, string> = {
     primary: 'btn-primary',
@@ -46,22 +46,22 @@ export class Button {
     error: 'btn-error',
   };
 
-  get buttonClasses(): Record<string, boolean> {
+  readonly buttonClasses = computed(() => {
+    const variant = this.variant();
+    const size = this.size();
     const classes: Record<string, boolean> = {
-      [this.variantClasses[this.variant] ?? this.variantClasses.primary]: true,
-      loading: this.loading,
-      'btn-outline': this.outline,
-      'btn-block': this.fullWidth,
+      [this.variantClasses[variant] ?? this.variantClasses.primary]: true,
+      loading: this.loading(),
+      'btn-outline': this.outline(),
+      'btn-block': this.fullWidth(),
     };
 
-    if (this.size !== 'md') {
-      classes[`btn-${this.size}`] = true;
+    if (size !== 'md') {
+      classes[`btn-${size}`] = true;
     }
 
     return classes;
-  }
+  });
 
-  get isDisabled(): boolean {
-    return this.disabled || this.loading;
-  }
+  readonly isDisabled = computed(() => this.disabled() || this.loading());
 }
