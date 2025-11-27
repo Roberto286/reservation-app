@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { EventCategory } from "src/schemas/event.schema";
+import { EventCategory } from "@reservation-app/shared";
 
 @Injectable()
 export class EventsService {

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { EventCategory } from "@reservation-app/shared";
 import type { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
 
@@ -7,14 +8,6 @@ export enum EventStatus {
   Published = "PUBLISHED",
   Cancelled = "CANCELLED",
   Completed = "COMPLETED",
-}
-
-export enum EventCategory {
-  Music = "MUSIC",
-  Nightlife = "NIGHTLIFE",
-  PerformingArts = "PERFORMING_ARTS",
-  Holidays = "HOLIDAYS",
-  Business = "BUSINESS",
 }
 
 @Schema({ timestamps: true })

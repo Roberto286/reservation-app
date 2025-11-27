@@ -57,6 +57,9 @@ importers:
       '@angular/compiler-cli':
         specifier: ^20.3.0
         version: 20.3.11(@angular/compiler@20.3.11)(typescript@5.9.3)
+      '@reservation-app/shared':
+        specifier: link:../shared
+        version: link:../shared
       '@types/jasmine':
         specifier: ~5.1.0
         version: 5.1.12
