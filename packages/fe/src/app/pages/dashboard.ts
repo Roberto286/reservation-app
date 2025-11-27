@@ -1,10 +1,22 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
+import { EventCategory, GetEventsDto } from '@reservation-app/shared';
 import { EventsMenu } from '../components/events-menu/events-menu';
 
 @Component({
   selector: 'app-dashboard',
-  template: `<app-events-menu></app-events-menu>`,
+  template: `<app-events-menu (categorySelected)="onCategorySelected($event)"></app-events-menu>`,
   styles: [],
   imports: [EventsMenu],
 })
-export class Dashboard {}
+export class Dashboard {
+  private readonly http = inject(HttpClient);
+  events: GetEventsDto | null = null;
+
+  onCategorySelected(category: EventCategory | null) {
+    this.http.get<GetEventsDto>(`/events/${category}`).subscribe((events) => {
+      console.log('Events for category', category, events);
+      this.events = events;
+    });
+  }
+}
