@@ -1,0 +1,17 @@
+<div
+  [ngClass]="hostClasses()"
+  [attr.aria-hidden]="open() ? null : 'true'"
+  role="dialog"
+  aria-modal="true"
+  (click)="onBackdropClick($event)"
+>
+  <div [ngClass]="modalBoxClasses()" (click)="$event.stopPropagation()">
+    <ng-content select="[modal-header]"></ng-content>
+
+    <ng-content></ng-content>
+
+    <div class="modal-action">
+      <ng-content select="[modal-actions]"></ng-content>
+    </div>
+  </div>
+</div>
