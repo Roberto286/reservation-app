@@ -1,29 +1,24 @@
 import { booleanAttribute, Component, forwardRef, input, signal } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { InputEmail } from './input-email/input-email';
-import { InputPassword } from './input-password/input-password';
-
-export type InputType = 'text' | 'password' | 'email' | 'number' | 'date' | 'datetime-local';
 
 @Component({
-  selector: 'app-input-component',
-  imports: [InputEmail, InputPassword],
-  templateUrl: './input-component.html',
-  styleUrl: './input-component.css',
+  selector: 'app-textarea-component',
+  standalone: true,
+  templateUrl: './textarea-component.html',
+  styleUrl: './textarea-component.css',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => TextareaComponent),
       multi: true,
     },
   ],
 })
-export class InputComponent implements ControlValueAccessor {
-  readonly type = input<InputType>('text');
+export class TextareaComponent implements ControlValueAccessor {
   readonly label = input('');
   readonly placeholder = input('');
   readonly helperText = input<string | null>(null);
-  readonly autocomplete = input<string | null>(null);
+  readonly rows = input(4);
   readonly required = input(false, { transform: booleanAttribute });
 
   protected readonly value = signal('');
@@ -48,12 +43,9 @@ export class InputComponent implements ControlValueAccessor {
     this.isDisabled.set(isDisabled);
   }
 
-  protected onNativeInput(event: Event): void {
-    this.syncValue(this.readValue(event));
-  }
-
-  protected onCustomInput(event: Event | string): void {
-    this.syncValue(this.readValue(event));
+  protected onInput(event: Event): void {
+    const next = (event.target as HTMLTextAreaElement | null)?.value ?? '';
+    this.syncValue(next);
   }
 
   protected onBlur(): void {
@@ -63,14 +55,5 @@ export class InputComponent implements ControlValueAccessor {
   private syncValue(next: string): void {
     this.value.set(next);
     this.onChange(next);
-  }
-
-  private readValue(eventOrValue: Event | string): string {
-    if (typeof eventOrValue === 'string') {
-      return eventOrValue;
-    }
-
-    const target = eventOrValue.target as HTMLInputElement | null;
-    return target?.value ?? '';
   }
 }

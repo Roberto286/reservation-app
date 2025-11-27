@@ -1,0 +1,27 @@
+<div class="form-control w-full">
+  @if (label()) {
+  <label class="label">
+    <span class="label-text" [textContent]="label()"></span>
+    @if (required()) {
+    <span class="label-text-alt text-error" aria-hidden="true">*</span>
+    }
+  </label>
+  }
+
+  <textarea
+    class="textarea textarea-bordered w-full"
+    [rows]="rows()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    [attr.required]="required() ? '' : null"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  ></textarea>
+
+  @if (helperText()) {
+  <label class="label">
+    <span class="label-text-alt" [textContent]="helperText()"></span>
+  </label>
+  }
+</div>

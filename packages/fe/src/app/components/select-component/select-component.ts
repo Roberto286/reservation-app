@@ -1,30 +1,31 @@
 import { booleanAttribute, Component, forwardRef, input, signal } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { InputEmail } from './input-email/input-email';
-import { InputPassword } from './input-password/input-password';
 
-export type InputType = 'text' | 'password' | 'email' | 'number' | 'date' | 'datetime-local';
+export type SelectOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+};
 
 @Component({
-  selector: 'app-input-component',
-  imports: [InputEmail, InputPassword],
-  templateUrl: './input-component.html',
-  styleUrl: './input-component.css',
+  selector: 'app-select-component',
+  standalone: true,
+  templateUrl: './select-component.html',
+  styleUrl: './select-component.css',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => SelectComponent),
       multi: true,
     },
   ],
 })
-export class InputComponent implements ControlValueAccessor {
-  readonly type = input<InputType>('text');
+export class SelectComponent implements ControlValueAccessor {
   readonly label = input('');
-  readonly placeholder = input('');
+  readonly placeholder = input<string | null>(null);
   readonly helperText = input<string | null>(null);
-  readonly autocomplete = input<string | null>(null);
   readonly required = input(false, { transform: booleanAttribute });
+  readonly options = input<SelectOption[]>([]);
 
   protected readonly value = signal('');
   protected readonly isDisabled = signal(false);
@@ -48,12 +49,9 @@ export class InputComponent implements ControlValueAccessor {
     this.isDisabled.set(isDisabled);
   }
 
-  protected onNativeInput(event: Event): void {
-    this.syncValue(this.readValue(event));
-  }
-
-  protected onCustomInput(event: Event | string): void {
-    this.syncValue(this.readValue(event));
+  protected onSelectionChange(event: Event): void {
+    const next = (event.target as HTMLSelectElement | null)?.value ?? '';
+    this.syncValue(next);
   }
 
   protected onBlur(): void {
@@ -63,14 +61,5 @@ export class InputComponent implements ControlValueAccessor {
   private syncValue(next: string): void {
     this.value.set(next);
     this.onChange(next);
-  }
-
-  private readValue(eventOrValue: Event | string): string {
-    if (typeof eventOrValue === 'string') {
-      return eventOrValue;
-    }
-
-    const target = eventOrValue.target as HTMLInputElement | null;
-    return target?.value ?? '';
   }
 }

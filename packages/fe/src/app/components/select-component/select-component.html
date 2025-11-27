@@ -1,0 +1,41 @@
+<div class="form-control w-full">
+  @if (label()) {
+  <label class="label">
+    <span class="label-text" [textContent]="label()"></span>
+    @if (required()) {
+    <span class="label-text-alt text-error" aria-hidden="true">*</span>
+    }
+  </label>
+  }
+
+  <select
+    class="select select-bordered w-full"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    [attr.required]="required() ? '' : null"
+    (change)="onSelectionChange($event)"
+    (blur)="onBlur()"
+  >
+    @if (placeholder()) {
+    <option
+      value=""
+      disabled
+      hidden
+      [attr.selected]="value() ? null : ''"
+      [textContent]="placeholder()"
+    ></option>
+    } @for (option of options(); track option.value) {
+    <option
+      [value]="option.value"
+      [disabled]="option.disabled ?? false"
+      [textContent]="option.label"
+    ></option>
+    }
+  </select>
+
+  @if (helperText()) {
+  <label class="label">
+    <span class="label-text-alt" [textContent]="helperText()"></span>
+  </label>
+  }
+</div>
