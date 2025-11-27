@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import type { EventCategory } from '@reservation-app/shared';
 @Component({
   selector: 'app-events-menu',
@@ -15,7 +15,7 @@ import type { EventCategory } from '@reservation-app/shared';
         [checked]="selectedCategory() === category"
         [name]="category"
         [aria-label]="category"
-        (change)="selectedCategory.set(category)"
+        (change)="onCategorySelected(category)"
       />
       }
     </div>
@@ -23,15 +23,19 @@ import type { EventCategory } from '@reservation-app/shared';
   styleUrl: './events-menu.css',
 })
 export class EventsMenu {
-  categories = signal<EventCategory[]>([]);
+  private readonly http = inject(HttpClient);
+  categorySelected = output<EventCategory | null>();
   selectedCategory = signal<EventCategory | null>(null);
+  categories = signal<EventCategory[]>([]);
 
-  constructor(private readonly http: HttpClient) {
+  constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
       this.categories.set(categories);
     });
-    effect(() => {
-      console.log('Event categories updated:', this.selectedCategory());
-    });
+  }
+
+  onCategorySelected(category: EventCategory) {
+    this.selectedCategory.set(category);
+    this.categorySelected.emit(category);
   }
 }
