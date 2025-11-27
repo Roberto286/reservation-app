@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-navlink',
   imports: [RouterModule],
-  templateUrl: './navlink.html',
-  styleUrl: './navlink.css',
+  template: `<a [routerLink]="route.path">{{ route.label }}</a> `,
+  styles: [],
 })
 export class Navlink {
   @Input() route!: { path: string; label: string };

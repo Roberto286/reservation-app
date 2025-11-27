@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NAVBAR_ROUTES } from '../../constants';
-import { LoginButton } from '../login-button/login-button';
-import { Navlink } from '../navlink/navlink';
-import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
+import { LoginButton } from '../login-button';
+import { Navlink } from '../navlink';
+import { ThemeSwitcher } from '../theme-switcher';
 
 @Component({
   selector: 'app-navbar',
