@@ -1,5 +1,12 @@
-<app-events-menu (categorySelected)="onCategorySelected($event)"></app-events-menu>
+<app-events-menu
+  [categories]="categories()"
+  (categorySelected)="onCategorySelected($event)"
+></app-events-menu>
 <div class="flex justify-between mt-10">
   <h2 class="text-2xl font-bold">Eventi</h2>
-  <app-button>Nuovo Evento</app-button>
+  <app-button (click)="onNewEvent()">Nuovo Evento</app-button>
 </div>
+<app-modal [open]="showModal()" [size]="'xl'" (closed)="showModal.set(false)">
+  <div modal-header class="font-bold text-lg">Crea Nuovo Evento</div>
+  <app-event-form [categories]="categories()"></app-event-form>
+</app-modal>

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import type { EventCategory } from '@reservation-app/shared';
 @Component({
   selector: 'app-events-menu',
@@ -23,16 +22,9 @@ import type { EventCategory } from '@reservation-app/shared';
   styleUrl: './events-menu.css',
 })
 export class EventsMenu {
-  private readonly http = inject(HttpClient);
   categorySelected = output<EventCategory | null>();
   selectedCategory = signal<EventCategory | null>(null);
-  categories = signal<EventCategory[]>([]);
-
-  constructor() {
-    this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
-      this.categories.set(categories);
-    });
-  }
+  categories = input<EventCategory[]>([]);
 
   onCategorySelected(category: EventCategory) {
     this.selectedCategory.set(category);

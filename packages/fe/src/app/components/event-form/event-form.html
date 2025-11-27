@@ -1,0 +1,44 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <app-input-component
+      label="Titolo"
+      placeholder="Inserisci il titolo dell'evento"
+      formControlName="title"
+      [required]="true"
+    ></app-input-component>
+
+    <app-input-component
+      label="Data e ora"
+      type="datetime-local"
+      formControlName="dateTime"
+      [required]="true"
+    ></app-input-component>
+
+    <app-select-component
+      label="Categoria"
+      placeholder="Seleziona una categoria"
+      formControlName="category"
+      [required]="true"
+      [options]="categoriesOptions()"
+    ></app-select-component>
+
+    <app-input-component
+      label="Luogo"
+      placeholder="Inserisci il luogo dell'evento"
+      formControlName="location"
+    ></app-input-component>
+
+    <app-textarea-component
+      class="md:col-span-2"
+      label="Descrizione"
+      placeholder="Inserisci una descrizione per l'evento"
+      formControlName="description"
+      [rows]="4"
+    ></app-textarea-component>
+  </div>
+
+  <div class="flex justify-end space-x-4">
+    <app-button type="button" variant="secondary">Annulla</app-button>
+    <app-button type="submit" [disabled]="form.invalid">Salva</app-button>
+  </div>
+</form>
