@@ -24,7 +24,6 @@ export class Login {
   handleSubmit(formValue: AuthenticationFormValue) {
     this.http.post<{ access_token: string }>('/auth/login', formValue).subscribe({
       next: (res) => {
-        this.cookieService.set('isLoggedIn', 'true');
         this.cookieService.set('accessToken', res.access_token);
         this.router.navigate(['/dashboard']);
       },
