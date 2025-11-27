@@ -13,9 +13,9 @@
   </svg>
   <input
     type="email"
-    [placeholder]="placeholder"
-    [value]="value"
-    [disabled]="disabled"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    [disabled]="disabled()"
     (input)="valueChange.emit($event)"
     (blur)="blur.emit()"
     required

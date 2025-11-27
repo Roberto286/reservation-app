@@ -1,22 +1,46 @@
-<div class="input-{{ type }}">
-  @if (type === 'email') {
+<div class="form-control w-full">
+  @if (label()) {
+  <label class="label">
+    <span class="label-text" [textContent]="label()"></span>
+    @if (required()) {
+    <span class="label-text-alt text-error" aria-hidden="true">*</span>
+    }
+  </label>
+  } @if (type() === 'email') {
   <app-input-email
-    class="block"
-    [value]="value"
-    [disabled]="disabled"
-    [label]="label"
-    (valueChange)="onInput($event)"
+    class="block w-full"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    [label]="label()"
+    [placeholder]="placeholder()"
+    (valueChange)="onCustomInput($event)"
     (blur)="onBlur()"
   ></app-input-email>
-  } @else if(type === 'password') {
+  } @else if (type() === 'password') {
   <app-input-password
-    class="block"
-    [value]="value"
-    [disabled]="disabled"
-    [label]="label"
-    (valueChange)="onInput($event)"
-    [placeholder]="placeholder ? placeholder : 'Password'"
+    class="block w-full"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    [label]="label()"
+    [placeholder]="placeholder()"
+    (valueChange)="onCustomInput($event)"
     (blur)="onBlur()"
   ></app-input-password>
+  } @else {
+  <input
+    class="input input-bordered w-full"
+    [attr.type]="type()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    [attr.required]="required() ? '' : null"
+    [attr.autocomplete]="autocomplete() ?? null"
+    (input)="onNativeInput($event)"
+    (blur)="onBlur()"
+  />
+  } @if (helperText()) {
+  <label class="label">
+    <span class="label-text-alt" [textContent]="helperText()"></span>
+  </label>
   }
 </div>

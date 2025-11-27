@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-input-email',
@@ -7,10 +7,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './input-email.css',
 })
 export class InputEmail {
-  @Input() placeholder = 'mail@site.com';
-  @Input() value = '';
-  @Input() disabled = false;
-  @Input() label = '';
-  @Output() valueChange = new EventEmitter<Event>();
-  @Output() blur = new EventEmitter<void>();
+  readonly placeholder = input('mail@site.com');
+  readonly value = input('');
+  readonly disabled = input(false);
+  readonly label = input('');
+  readonly valueChange = output<Event>();
+  readonly blur = output<void>();
 }

@@ -1,5 +1,5 @@
-import { Component, forwardRef, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
+import { booleanAttribute, Component, forwardRef, input, signal } from '@angular/core';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { InputEmail } from './input-email/input-email';
 import { InputPassword } from './input-password/input-password';
 
@@ -19,18 +19,21 @@ export type InputType = 'text' | 'password' | 'email' | 'number' | 'date';
   ],
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() type!: InputType;
-  @Input() label!: string;
-  @Input() placeholder = '';
+  readonly type = input<InputType>('text');
+  readonly label = input('');
+  readonly placeholder = input('');
+  readonly helperText = input<string | null>(null);
+  readonly autocomplete = input<string | null>(null);
+  readonly required = input(false, { transform: booleanAttribute });
 
-  value = '';
-  disabled = false;
+  protected readonly value = signal('');
+  protected readonly isDisabled = signal(false);
 
-  onChange: (value: string) => void = () => {};
-  onTouched: () => void = () => {};
+  private onChange: (value: string) => void = () => {};
+  private onTouched: () => void = () => {};
 
-  writeValue(value: string): void {
-    this.value = value || '';
+  writeValue(value: string | null): void {
+    this.value.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -42,16 +45,32 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.isDisabled.set(isDisabled);
   }
 
-  onInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.value = input.value;
-    this.onChange(this.value);
+  protected onNativeInput(event: Event): void {
+    this.syncValue(this.readValue(event));
   }
 
-  onBlur(): void {
+  protected onCustomInput(event: Event | string): void {
+    this.syncValue(this.readValue(event));
+  }
+
+  protected onBlur(): void {
     this.onTouched();
+  }
+
+  private syncValue(next: string): void {
+    this.value.set(next);
+    this.onChange(next);
+  }
+
+  private readValue(eventOrValue: Event | string): string {
+    if (typeof eventOrValue === 'string') {
+      return eventOrValue;
+    }
+
+    const target = eventOrValue.target as HTMLInputElement | null;
+    return target?.value ?? '';
   }
 }

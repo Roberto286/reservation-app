@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-input-password',
@@ -7,10 +7,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './input-password.css',
 })
 export class InputPassword {
-  @Input() label!: string;
-  @Input() value = '';
-  @Input() disabled = false;
-  @Input() placeholder = 'Password';
-  @Output() valueChange = new EventEmitter<Event>();
-  @Output() blur = new EventEmitter<void>();
+  readonly label = input('');
+  readonly value = input('');
+  readonly disabled = input(false);
+  readonly placeholder = input('Password');
+  readonly valueChange = output<Event>();
+  readonly blur = output<void>();
+
+  protected handleInput(event: Event): void {
+    this.valueChange.emit(event);
+  }
 }
