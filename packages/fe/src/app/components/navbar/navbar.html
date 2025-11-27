@@ -1,25 +1,46 @@
 <div class="navbar bg-base-100 shadow-sm">
-  <div class="flex-none">
-    <button class="btn btn-square btn-ghost">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        class="inline-block h-5 w-5 stroke-current"
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8m-8 6h16"
+          />
+        </svg>
+      </div>
+      <ul
+        tabindex="-1"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
-    </button>
+        @for(route of navbarRoutes; track route.path){
+        <li>
+          <app-navlink [route]="route"></app-navlink>
+        </li>
+        }
+      </ul>
+    </div>
+    <a class="btn btn-ghost text-xl">daisyUI</a>
   </div>
-  <div class="flex-1">
-    <a class="btn btn-ghost text-xl">Reservation App</a>
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+      @for(route of navbarRoutes; track route.path){
+      <li>
+        <app-navlink [route]="route"></app-navlink>
+      </li>
+      }
+    </ul>
   </div>
-  <div class="flex-none">
+  <div class="navbar-end gap-2">
     <app-theme-switcher></app-theme-switcher>
+    <app-login-button></app-login-button>
   </div>
 </div>

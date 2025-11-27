@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationForm } from '../components/authentication-form/authentication-form';
-import { AuthenticationFormValue } from '../types/authentication-form';
+import { AuthStateService } from '../core/services/auth-state.service';
+import type { AuthenticationFormValue } from '../types/authentication-form';
 
 @Component({
   imports: [AuthenticationForm],
@@ -15,16 +15,14 @@ import { AuthenticationFormValue } from '../types/authentication-form';
   styles: [],
 })
 export class Login {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly router: Router,
-    private readonly cookieService: CookieService
-  ) {}
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly authState = inject(AuthStateService);
 
   handleSubmit(formValue: AuthenticationFormValue) {
     this.http.post<{ access_token: string }>('/auth/login', formValue).subscribe({
       next: (res) => {
-        this.cookieService.set('accessToken', res.access_token);
+        this.authState.persistAccessToken(res.access_token);
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {

@@ -15,4 +15,5 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/dashboard').then((d) => d.Dashboard),
     canActivate: [authGuard],
   },
+  { path: 'logout', loadComponent: () => import('./pages/logout').then((l) => l.Logout) },
 ];
