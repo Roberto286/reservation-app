@@ -6,6 +6,7 @@ import { UsersService } from "./users/users.service";
 import { UsersModule } from "./users/users.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
         uri: configService.get<string>("DB_CONNECTION_STRING"),
       }),
     }),
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
