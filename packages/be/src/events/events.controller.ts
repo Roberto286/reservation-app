@@ -1,8 +1,10 @@
-import { Controller, Get, Param } from "@nestjs/common";
-import { EventCategory, GetEventsDto } from "@reservation-app/shared";
+import { Controller, Get, Param, UseGuards } from "@nestjs/common";
+import type { EventCategory, GetEventsDto } from "@reservation-app/shared";
+import { AuthGuard } from "src/auth/auth.guard";
 import { EventsService } from "./events.service";
 
 @Controller("events")
+@UseGuards(AuthGuard)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 

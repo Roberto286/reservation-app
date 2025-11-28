@@ -3,10 +3,11 @@ import { InjectModel } from "@nestjs/mongoose";
 import {
   EventCategory,
   GetEventDto,
-  GetEventsDto,
+  type GetEventsDto,
 } from "@reservation-app/shared";
-import { Model } from "mongoose";
-import { EventDocument } from "src/schemas/event.schema";
+import type { Model } from "mongoose";
+import type { EventDocument } from "src/schemas/event.schema";
+import { Event } from "src/schemas/event.schema";
 
 @Injectable()
 export class EventsService {
@@ -15,7 +16,7 @@ export class EventsService {
   ) {}
 
   private mapEntitiesToDto(events: EventDocument[]): GetEventsDto {
-    const eventDtos = events.map((event) => {
+    const eventDtos = events.map(() => {
       return new GetEventDto();
     });
 
