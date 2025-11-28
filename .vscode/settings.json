@@ -3,7 +3,8 @@
 	"biome.enabled": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit",
-		"source.addMissingImports.ts": "explicit"
+		"source.addMissingImports.ts": "explicit",
+		"source.fixAll.biome": "explicit"
 	},
 	"workbench.colorCustomizations": {
 		"activityBar.activeBackground": "#dd6971",
