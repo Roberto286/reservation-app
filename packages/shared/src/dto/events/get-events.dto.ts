@@ -1,5 +1,4 @@
-import type { EventCategory } from "../event-category";
-
+import { EventCategory } from "../../event-category";
 export type EventStatusDto = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
 
 export class EventOrganizerDto {

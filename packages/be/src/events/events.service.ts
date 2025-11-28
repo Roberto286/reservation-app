@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
+  CreateEventDto,
   EventCategory,
   GetEventDto,
   type GetEventsDto,
@@ -32,5 +33,10 @@ export class EventsService {
 
   getCategories() {
     return Object.values(EventCategory);
+  }
+
+  createEvent(body: CreateEventDto): Promise<EventDocument> {
+    const event = new this.eventModel(body);
+    return event.save();
   }
 }
