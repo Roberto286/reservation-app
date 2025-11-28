@@ -6,7 +6,7 @@ import type { EventCategory } from '@reservation-app/shared';
   standalone: true,
   imports: [CommonModule],
   template: ` <div class="w-full mt-4 flex justify-center" role="tablist">
-    <div class="lg:w-3/4 tabs tabs-box justify-evenly py-2.5">
+    <div class="lg:w-3/4 tabs tabs-box justify-between py-2.5 px-12">
       @for (category of categories(); track $index) {
       <input
         type="radio"
