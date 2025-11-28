@@ -48,7 +48,7 @@ export class Event {
   @Prop({ type: String, enum: EventCategory, required: true })
   category!: EventCategory;
 
-  @Prop({ type: Types.ObjectId, ref: "User", required: true })
+  @Prop({ type: Types.ObjectId, ref: "User" })
   organizerId!: Types.ObjectId;
 
   @Prop({ type: [String], default: [] })
