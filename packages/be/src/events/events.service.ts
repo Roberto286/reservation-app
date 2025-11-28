@@ -17,11 +17,23 @@ export class EventsService {
   ) {}
 
   private mapEntitiesToDto(events: EventDocument[]): GetEventsDto {
-    const eventDtos = events.map(() => {
-      return new GetEventDto();
-    });
+    return events.map((event) => this.mapEntityToDto(event));
+  }
 
-    return eventDtos;
+  private mapEntityToDto(event: EventDocument): GetEventDto {
+    const dto = new GetEventDto();
+    dto.id = event._id.toString();
+    dto.title = event.title;
+    dto.description = event.description;
+    dto.location = event.location;
+    dto.startAt = event.startAt.toISOString();
+    dto.endAt = event.endAt.toISOString();
+    dto.maxParticipants = event.maxParticipants;
+    dto.reservedSeats = event.reservedSeats;
+    dto.status = event.status;
+    dto.category = event.category;
+    dto.tags = event.tags ?? [];
+    return dto;
   }
 
   async getEventsByCategory(category: EventCategory): Promise<GetEventsDto> {
