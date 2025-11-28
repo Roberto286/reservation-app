@@ -11,7 +11,7 @@ export class AuthStateService {
   readonly isAuthenticated = computed(() => this.authenticated());
 
   persistAccessToken(token: string) {
-    this.cookieService.set(ACCESS_TOKEN_COOKIE, token);
+    this.cookieService.set(ACCESS_TOKEN_COOKIE, token, undefined, '/');
     this.authenticated.set(true);
   }
 
@@ -22,5 +22,10 @@ export class AuthStateService {
 
   refreshFromCookies() {
     this.authenticated.set(this.cookieService.check(ACCESS_TOKEN_COOKIE));
+  }
+
+  getAccessToken(): string | null {
+    const token = this.cookieService.get(ACCESS_TOKEN_COOKIE);
+    return token ? token : null;
   }
 }
