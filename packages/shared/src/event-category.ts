@@ -7,7 +7,7 @@ export enum EventCategory {
 }
 
 export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
-  [EventCategory.Music]: "Music",
+  [EventCategory.Music]: "Musica",
   [EventCategory.Nightlife]: "Vita notturna",
   [EventCategory.PerformingArts]: "Arti sceniche",
   [EventCategory.Holidays]: "Festività",

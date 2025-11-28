@@ -7,7 +7,7 @@ import {
   IsPositive,
   IsString,
 } from "class-validator";
-import { EventCategory } from "../..";
+import { EventCategory } from "../../event-category";
 
 export class CreateEventDto {
   @IsString()
