@@ -29,6 +29,15 @@
       [required]="true"
     ></app-input-component>
 
+    <app-input-component
+      label="Numero massimo di partecipanti"
+      type="number"
+      placeholder="Inserisci il numero massimo di partecipanti"
+      formControlName="maxParticipants"
+      [required]="true"
+      [min]="1"
+    ></app-input-component>
+
     <app-textarea-component
       class="md:col-span-2"
       label="Descrizione"
