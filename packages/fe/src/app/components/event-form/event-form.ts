@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,34 +7,58 @@ import {
   input,
   output,
   Signal,
+  signal,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
-import { EventCategory } from '@reservation-app/shared';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CreateEventDto, EventCategory } from '@reservation-app/shared';
+import { Alert } from '../alert';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
-import { SelectComponent, type SelectOption } from '../select-component/select-component';
+import { SelectComponent, SelectOption } from '../select-component/select-component';
 import { TextareaComponent } from '../textarea-component/textarea-component';
+
+type EventFormValue = {
+  title: FormControl<string>;
+  dateTime: FormControl<string>;
+  category: FormControl<EventCategory>;
+  location: FormControl<string>;
+  maxParticipants: FormControl<number>;
+  description: FormControl<string>;
+};
+
+type EventFormRawValue = {
+  [K in keyof EventFormValue]: EventFormValue[K]['value'];
+};
 
 @Component({
   selector: 'app-event-form',
   standalone: true,
-  imports: [ReactiveFormsModule, Button, InputComponent, SelectComponent, TextareaComponent],
+  imports: [ReactiveFormsModule, Button, InputComponent, SelectComponent, TextareaComponent, Alert],
   templateUrl: './event-form.html',
   styleUrl: './event-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventForm {
-  onClose = output<void>();
+  readonly categories = input<EventCategory[]>([]);
+  protected readonly onClose = output<void>();
   private readonly fb = inject(FormBuilder);
-  readonly form = this.fb.nonNullable.group({
+  private readonly http = inject(HttpClient);
+  readonly formSubmitted = output<void>();
+
+  protected readonly form: FormGroup<EventFormValue> = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     dateTime: ['', Validators.required],
-    category: ['', Validators.required],
+    category: [EventCategory.Business, Validators.required],
     location: ['', Validators.required],
+    maxParticipants: [0, [Validators.required, Validators.min(1)]],
     description: [''],
   });
-  categories = input<EventCategory[]>([]);
 
   protected readonly categoriesOptions: Signal<SelectOption[]> = computed(() =>
     this.categories().map((category) => ({
@@ -42,12 +67,39 @@ export class EventForm {
     }))
   );
 
+  private mapFormToDto(formValue: EventFormRawValue): CreateEventDto {
+    const start = new Date(formValue.dateTime);
+    const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+
+    return {
+      title: formValue.title,
+      description: formValue.description,
+      location: formValue.location,
+      startAt: start.toISOString(),
+      endAt: end.toISOString(),
+      maxParticipants: Number(formValue.maxParticipants),
+      category: formValue.category,
+    };
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    console.log(this.form.getRawValue());
+    const dto = this.mapFormToDto(this.form.getRawValue());
+
+    this.http.post('/events', dto satisfies CreateEventDto).subscribe({
+      next: () => {
+        this.onClose.emit();
+        this.formSubmitted.emit();
+      },
+      error: () => {
+        console.error(
+          "Si è verificato un errore durante la creazione dell'evento. Per favore riprova."
+        );
+      },
+    });
   }
 }
