@@ -37,6 +37,8 @@
     [attr.autocomplete]="autocomplete() ?? null"
     (input)="onNativeInput($event)"
     (blur)="onBlur()"
+    [attr.min]="min() !== null ? min() : null"
+    [attr.max]="max() !== null ? max() : null"
   />
   } @if (helperText()) {
   <label class="label">

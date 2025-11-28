@@ -25,6 +25,8 @@ export class InputComponent implements ControlValueAccessor {
   readonly helperText = input<string | null>(null);
   readonly autocomplete = input<string | null>(null);
   readonly required = input(false, { transform: booleanAttribute });
+  readonly min = input<number | null>(null);
+  readonly max = input<number | null>(null);
 
   protected readonly value = signal('');
   protected readonly isDisabled = signal(false);
