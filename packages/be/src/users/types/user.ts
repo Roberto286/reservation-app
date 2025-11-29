@@ -1,6 +1,6 @@
 import { User } from "src/schemas/user.schema";
 
-export type UserWithoutPassword = Omit<User, "password"> | null;
-export type UserWithIdAndWithoutPassword = Omit<User, "password"> & {
-  _id: string;
-};
+type UserWithId = User & { _id: string };
+
+export type UserWithoutPassword = Omit<UserWithId, "password"> | null;
+export type UserWithIdAndWithoutPassword = Omit<UserWithId, "password">;
