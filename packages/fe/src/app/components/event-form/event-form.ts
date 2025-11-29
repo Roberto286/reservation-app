@@ -16,7 +16,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { CreateEventDto, EventCategory } from '@reservation-app/shared';
-import { Alert } from '../alert';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
 import { SelectComponent, SelectOption } from '../select-component/select-component';
@@ -38,7 +37,7 @@ type EventFormRawValue = {
 @Component({
   selector: 'app-event-form',
   standalone: true,
-  imports: [ReactiveFormsModule, Button, InputComponent, SelectComponent, TextareaComponent, Alert],
+  imports: [ReactiveFormsModule, Button, InputComponent, SelectComponent, TextareaComponent],
   templateUrl: './event-form.html',
   styleUrl: './event-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
