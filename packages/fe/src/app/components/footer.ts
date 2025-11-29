@@ -22,7 +22,7 @@ import { Component } from '@angular/core';
         <p>Copyright © {{ currentYear }} - All right reserved</p>
       </aside>
       <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-        <a>
+        <a class="cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -35,7 +35,7 @@ import { Component } from '@angular/core';
             ></path>
           </svg>
         </a>
-        <a>
+        <a class="cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -48,7 +48,7 @@ import { Component } from '@angular/core';
             ></path>
           </svg>
         </a>
-        <a>
+        <a class="cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
