@@ -159,6 +159,12 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.17
         version: 4.1.17
+      class-validator:
+        specifier: ^0.14.3
+        version: 0.14.3
+      class-validator-extended:
+        specifier: ^4.2.1
+        version: 4.2.1(class-validator@0.14.3)(validator@13.15.23)
       daisyui:
         specifier: ^5.5.3
         version: 5.5.3
@@ -168,6 +174,9 @@ importers:
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2
