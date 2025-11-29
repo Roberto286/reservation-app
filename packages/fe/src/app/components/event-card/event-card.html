@@ -43,11 +43,6 @@
     <div class="card-actions flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex flex-wrap gap-2">
         <span class="badge badge-outline" [textContent]="eventData().category"></span>
-        <span
-          class="badge badge-ghost badge-sm"
-          [ngClass]="statusBadgeColor()"
-          [textContent]="eventData().status"
-        ></span>
         @if (tags().length > 0) { @for (tag of tags(); track tag) {
         <span class="badge badge-dash badge-info text-xs" [textContent]="tag"></span>
         } }
@@ -69,7 +64,21 @@
         class="text-xs text-base-content/60"
         [textContent]="'Aggiornato: ' + eventDates().start"
       ></div>
-      <button class="btn btn-primary btn-sm sm:btn-md" type="button">Prenota</button>
+      <button
+        class="btn btn-primary btn-sm sm:btn-md"
+        type="button"
+        [disabled]="!canBook()"
+        (click)="bookSeats()"
+      >
+        @if (bookingState() === 'loading') {
+        <span class="loading loading-spinner loading-xs"></span>
+        Prenotazione... } @else { Prenota }
+      </button>
     </div>
+    @if (bookingState() === 'success') {
+    <p class="text-success text-sm" aria-live="polite">Prenotazione registrata!</p>
+    } @else if (bookingState() === 'error' && bookingError()) {
+    <p class="text-error text-sm" aria-live="assertive" [textContent]="bookingError()"></p>
+    }
   </div>
 </div>

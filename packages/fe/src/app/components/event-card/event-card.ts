@@ -1,6 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import type { GetEventDto } from '@reservation-app/shared';
+import { BookingsService } from '../../core/services/bookings.service';
 
 @Component({
   selector: 'app-event-card',
@@ -12,6 +21,10 @@ import type { GetEventDto } from '@reservation-app/shared';
 })
 export class EventCard {
   readonly eventData = input.required<GetEventDto>();
+  private readonly bookingsService = inject(BookingsService);
+  readonly eventBooked = output<void>();
+  protected readonly bookingState = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+  protected readonly bookingError = signal<string | null>(null);
 
   protected readonly isUpcoming = computed(() => {
     const start = new Date(this.eventData().startAt).getTime();
@@ -51,17 +64,21 @@ export class EventCard {
 
   protected readonly placeholderImage = 'https://placehold.co/384x192/png';
 
-  protected readonly statusBadgeColor = computed(() => {
-    const status = this.eventData().status;
-    switch (status) {
-      case 'PUBLISHED':
-        return 'badge-success';
-      case 'CANCELLED':
-        return 'badge-error';
-      case 'COMPLETED':
-        return 'badge-neutral';
-      default:
-        return 'badge-warning';
+  protected readonly canBook = computed(() =>
+    this.bookingsService.canBook(this.eventData(), this.bookingState())
+  );
+
+  bookSeats() {
+    if (!this.canBook()) {
+      return;
     }
-  });
+
+    this.bookingsService.bookSeats(this.eventData().id, 1, {
+      onStateChange: (state) => {
+        this.bookingState.set(state);
+        this.eventBooked.emit();
+      },
+      onErrorMessage: (message) => this.bookingError.set(message),
+    });
+  }
 }

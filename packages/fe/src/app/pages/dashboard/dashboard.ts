@@ -45,4 +45,8 @@ export class Dashboard {
   onNewEventCreated() {
     this.fetchEvents();
   }
+
+  onEventBooked() {
+    this.fetchEvents();
+  }
 }

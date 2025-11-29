@@ -16,7 +16,7 @@
   }"
 >
   @for (event of events(); track event.id) {
-  <app-event-card [eventData]="event"></app-event-card>
+  <app-event-card [eventData]="event" (eventBooked)="onEventBooked()"></app-event-card>
   }
 </div>
 }
