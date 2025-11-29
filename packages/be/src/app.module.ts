@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { MongooseModule } from "@nestjs/mongoose";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
-import { UsersService } from "./users/users.service";
+import { BookingsModule } from "./bookings/bookings.module";
+import { EventsModule } from "./events/events.module";
 import { UsersModule } from "./users/users.module";
-import { MongooseModule } from "@nestjs/mongoose";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -20,6 +20,7 @@ import { EventsModule } from './events/events.module';
       }),
     }),
     EventsModule,
+    BookingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
