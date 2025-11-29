@@ -25,6 +25,7 @@ export class EventCard {
   readonly eventBooked = output<void>();
   protected readonly bookingState = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
   protected readonly bookingError = signal<string | null>(null);
+  protected readonly selectedSeats = signal<number>(1);
 
   protected readonly isUpcoming = computed(() => {
     const start = new Date(this.eventData().startAt).getTime();
@@ -68,17 +69,27 @@ export class EventCard {
     this.bookingsService.canBook(this.eventData(), this.bookingState())
   );
 
+  protected readonly seatsOptions = computed(() => {
+    const available = this.availableSeats();
+    return Array.from({ length: available }, (_, i) => i + 1);
+  });
+
   bookSeats() {
     if (!this.canBook()) {
       return;
     }
 
-    this.bookingsService.bookSeats(this.eventData().id, 1, {
+    this.bookingsService.bookSeats(this.eventData().id, this.selectedSeats(), {
       onStateChange: (state) => {
         this.bookingState.set(state);
         this.eventBooked.emit();
       },
       onErrorMessage: (message) => this.bookingError.set(message),
     });
+  }
+
+  onSeatsChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedSeats.set(Number.parseInt(selectElement.value, 10));
   }
 }

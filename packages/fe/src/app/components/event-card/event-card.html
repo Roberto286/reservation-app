@@ -64,16 +64,31 @@
         class="text-xs text-base-content/60"
         [textContent]="'Aggiornato: ' + eventDates().start"
       ></div>
-      <button
-        class="btn btn-primary btn-sm sm:btn-md"
-        type="button"
-        [disabled]="!canBook()"
-        (click)="bookSeats()"
-      >
-        @if (bookingState() === 'loading') {
-        <span class="loading loading-spinner loading-xs"></span>
-        Prenotazione... } @else { Prenota }
-      </button>
+      <div class="flex items-center gap-2">
+        <select
+          class="select select-primary select-sm sm:select-md"
+          [disabled]="!canBook()"
+          [value]="selectedSeats()"
+          (change)="onSeatsChange($event)"
+        >
+          @for (seats of seatsOptions(); track seats) {
+          <option
+            [value]="seats"
+            [textContent]="seats + (seats === 1 ? ' posto' : ' posti')"
+          ></option>
+          }
+        </select>
+        <button
+          class="btn btn-primary btn-sm sm:btn-md"
+          type="button"
+          [disabled]="!canBook()"
+          (click)="bookSeats()"
+        >
+          @if (bookingState() === 'loading') {
+          <span class="loading loading-spinner loading-xs"></span>
+          Prenotazione... } @else { Prenota }
+        </button>
+      </div>
     </div>
     @if (bookingState() === 'success') {
     <p class="text-success text-sm" aria-live="polite">Prenotazione registrata!</p>
