@@ -5,6 +5,6 @@
   },
   "scripts": {
     "start:dev": "turbo run start:dev",
-    "start:docker": "pnpm --filter @reservation-app/shared build --watch & docker compose up --build -d"
+    "start:docker": "docker compose up --build -d"
   }
 }

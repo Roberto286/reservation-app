@@ -43,6 +43,7 @@ services:
     environment:
       - NODE_ENV=development
       - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+      - NODE_PATH=/app/node_modules
 
 volumes:
   mongodb_data:
