@@ -1,1 +1,75 @@
-<p>event-card works!</p>
+<div class="card bg-base-100 shadow-md w-full max-w-xl">
+  <figure class="h-48 w-full overflow-hidden bg-base-200">
+    <img
+      class="h-full w-full object-cover"
+      [src]="placeholderImage"
+      alt="Immagine evento"
+      loading="lazy"
+    />
+  </figure>
+  <div class="card-body gap-4">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h2 class="card-title text-base-content" [textContent]="eventData().title"></h2>
+        <p class="text-sm text-base-content/70" [textContent]="locationLabel()"></p>
+      </div>
+      @if (isUpcoming()) {
+      <div class="badge badge-secondary uppercase text-xs tracking-wide">Upcoming</div>
+      }
+    </div>
+
+    @if (eventData().description?.trim()?.length) {
+    <p
+      class="text-sm leading-relaxed text-base-content/80 text-ellipsis"
+      [textContent]="eventData().description"
+    ></p>
+    }
+
+    <div class="grid gap-2 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-base-content">Inizio:</span>
+        <span class="text-base-content/80" [textContent]="eventDates().start"></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-base-content">Fine:</span>
+        <span class="text-base-content/80" [textContent]="eventDates().end"></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-base-content">Organizzatore:</span>
+        <span class="text-base-content/80" [textContent]="organizerEmail()"></span>
+      </div>
+    </div>
+
+    <div class="card-actions flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-wrap gap-2">
+        <span class="badge badge-outline" [textContent]="eventData().category"></span>
+        <span
+          class="badge badge-ghost badge-sm"
+          [ngClass]="statusBadgeColor()"
+          [textContent]="eventData().status"
+        ></span>
+        @if (tags().length > 0) { @for (tag of tags(); track tag) {
+        <span class="badge badge-dash badge-info text-xs" [textContent]="tag"></span>
+        } }
+      </div>
+      <div class="text-sm text-base-content/80">
+        Posti disponibili:
+        <span class="font-semibold text-base-content" [textContent]="availableSeats()"></span>
+        <span
+          class="text-base-content/60"
+          [textContent]="' / ' + eventData().maxParticipants"
+        ></span>
+      </div>
+    </div>
+
+    <div
+      class="card-actions mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div
+        class="text-xs text-base-content/60"
+        [textContent]="'Aggiornato: ' + eventDates().start"
+      ></div>
+      <button class="btn btn-primary btn-sm sm:btn-md" type="button">Prenota</button>
+    </div>
+  </div>
+</div>
