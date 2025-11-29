@@ -1,5 +1,4 @@
 import { EventCategory } from "../../event-category";
-export type EventStatusDto = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
 
 export class EventOrganizerDto {
   email!: string;
@@ -14,7 +13,6 @@ export class GetEventDto {
   endAt!: string;
   maxParticipants!: number;
   reservedSeats!: number;
-  status!: EventStatusDto;
   category!: EventCategory;
   organizer!: EventOrganizerDto;
   tags!: string[];
