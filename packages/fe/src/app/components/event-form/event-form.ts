@@ -15,7 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CreateEventDto, EventCategory } from '@reservation-app/shared';
+import { CreateEventDto, EVENT_CATEGORY_LABELS, EventCategory } from '@reservation-app/shared';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
 import { SelectComponent, SelectOption } from '../select-component/select-component';
@@ -67,7 +67,7 @@ export class EventForm {
   protected readonly categoriesOptions: Signal<SelectOption[]> = computed(() =>
     this.categories().map((category) => ({
       value: category,
-      label: category,
+      label: EVENT_CATEGORY_LABELS[category],
     }))
   );
 
