@@ -9,6 +9,16 @@ import { EventsService } from "./events.service";
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
+  @Get("")
+  getAllEvents(): Promise<GetEventsDto> {
+    return this.eventsService.getEvents();
+  }
+
+  @Post("")
+  createEvent(@Body() body: CreateEventDto) {
+    this.eventsService.createEvent(body);
+  }
+
   @Get("categories")
   getCategories() {
     return this.eventsService.getCategories();
@@ -19,10 +29,5 @@ export class EventsController {
     @Param("category") category: EventCategory
   ): Promise<GetEventsDto> {
     return this.eventsService.getEventsByCategory(category);
-  }
-
-  @Post("")
-  createEvent(@Body() body: CreateEventDto) {
-    this.eventsService.createEvent(body);
   }
 }

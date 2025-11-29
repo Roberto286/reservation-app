@@ -24,11 +24,14 @@ export class Dashboard {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
       this.categories.set(categories);
     });
+
+    this.http.get<GetEventsDto>('/events').subscribe((events) => {
+      this.events.set(events);
+    });
   }
 
   onCategorySelected(category: EventCategory | null) {
     this.http.get<GetEventsDto>(`/events/${category}`).subscribe((events) => {
-      console.log('Events for category', category, events);
       this.events.set(events);
     });
   }

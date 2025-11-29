@@ -20,6 +20,10 @@ export class EventsService {
     return events.map((event) => this.mapEntityToDto(event));
   }
 
+  getEvents(): Promise<GetEventsDto> {
+    return this.eventModel.find().then(this.mapEntitiesToDto.bind(this));
+  }
+
   private mapEntityToDto(event: EventDocument): GetEventDto {
     const dto = new GetEventDto();
     dto.id = event._id.toString();
