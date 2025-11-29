@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginOkDto } from '@reservation-app/shared';
+import { Alert } from '../components/alert';
 import { AuthenticationForm } from '../components/authentication-form/authentication-form';
 import { AuthStateService } from '../core/services/auth-state.service';
 import type { AuthenticationFormValue } from '../types/authentication-form';
-import { Alert } from '../components/alert';
 
 @Component({
   imports: [AuthenticationForm, Alert],
@@ -25,12 +26,13 @@ export class Login {
   authenticationError = false;
 
   handleSubmit(formValue: AuthenticationFormValue) {
-    this.http.post<{ access_token: string }>('/auth/login', formValue).subscribe({
+    this.http.post<LoginOkDto>('/auth/login', formValue).subscribe({
       next: (res) => {
         this.authState.persistAccessToken(res.access_token);
+        this.authState.persistUserId(res.userId);
         this.router.navigate(['/dashboard']);
       },
-      error: (error) => {
+      error: () => {
         this.authenticationError = true;
       },
     });

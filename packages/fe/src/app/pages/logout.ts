@@ -11,7 +11,7 @@ export class Logout {
   router = inject(Router);
 
   constructor() {
-    this.authStateService.clearAccessToken();
+    this.authStateService.logout();
     this.router.navigate(['/login']);
   }
 }
