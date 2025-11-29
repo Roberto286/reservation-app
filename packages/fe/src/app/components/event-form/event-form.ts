@@ -60,7 +60,7 @@ export class EventForm {
     dateTime: [this.startingDate(), Validators.required],
     category: [EventCategory.Business, Validators.required],
     location: ['', Validators.required],
-    maxParticipants: [0, [Validators.required, Validators.min(1)]],
+    maxParticipants: [1, [Validators.required, Validators.min(1)]],
     description: [''],
   });
 
@@ -98,6 +98,7 @@ export class EventForm {
       next: () => {
         this.onClose.emit();
         this.formSubmitted.emit();
+        this.form.reset();
       },
       error: () => {
         console.error(
