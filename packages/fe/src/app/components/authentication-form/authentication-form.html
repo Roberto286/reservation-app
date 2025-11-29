@@ -7,28 +7,36 @@
     (ngSubmit)="submit()"
     class="flex flex-col items-center w-full gap-3 flex-1 justify-center"
   >
-    <app-input-component
-      class="w-full"
-      type="email"
-      label="Email"
-      formControlName="email"
-    ></app-input-component>
+    <label for="email" class="floating-label w-full">
+      <span>Email</span>
+      <app-input-component
+        type="email"
+        placeholder="mail@site.com"
+        formControlName="email"
+      ></app-input-component>
+    </label>
 
-    <app-input-component
-      class="w-full"
-      type="password"
-      label="Password"
-      formControlName="password"
-    ></app-input-component>
-
+    <label for="email" class="floating-label w-full">
+      <span>Password</span>
+      <app-input-component
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+      ></app-input-component>
+    </label>
     @if(isSigningUp) {
-    <app-input-component
-      class="w-full"
-      type="password"
-      label="Conferma Password"
-      formControlName="confirmPassword"
-      [placeholder]="'Conferma Password'"
-    ></app-input-component>
+    <label for="email" class="floating-label w-full">
+      <span>Conferma Password</span>
+      <app-input-component
+        type="password"
+        formControlName="confirmPassword"
+        [placeholder]="'Conferma Password'"
+      ></app-input-component>
+    </label>
+    <div class="flex flex-col items-start w-full">
+      <label for="userRole" class="label text-sm">Sei un organizzatore?</label>
+      <input formControlName="userRole" type="checkbox" class="checkbox" />
+    </div>
     }
 
     <button class="btn btn-primary w-full" type="submit" [disabled]="form.invalid">

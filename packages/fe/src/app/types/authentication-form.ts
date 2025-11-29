@@ -4,10 +4,12 @@ export type AuthenticationFormGroup = {
   email: FormControl<string | null>;
   password: FormControl<string | null>;
   confirmPassword: FormControl<string | null>;
+  userRole: FormControl<boolean>;
 };
 
 export type AuthenticationFormValue = {
   email: string | null;
   password: string | null;
   confirmPassword: string | null;
+  userRole: boolean;
 };
