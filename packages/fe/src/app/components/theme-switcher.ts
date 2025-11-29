@@ -59,7 +59,7 @@ export class ThemeSwitcher {
       return true; // default to dark mode
     }
     const savedTheme = localStorage.getItem(this.THEME_STORAGE_KEY);
-    return savedTheme === 'business' || savedTheme === null; // default to dark mode if not set
+    return savedTheme === 'sunset' || savedTheme === null; // default to dark mode if not set
   }
 
   private saveThemePreference(theme: Theme): void {
