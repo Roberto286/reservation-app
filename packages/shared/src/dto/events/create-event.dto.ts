@@ -1,13 +1,14 @@
+import { Type } from "class-transformer";
 import {
-  IsDateString,
+  IsDate,
   IsEnum,
   IsInt,
   IsNotEmpty,
   IsOptional,
   IsPositive,
   IsString,
-  MinDate,
 } from "class-validator";
+import { FutureDate } from "class-validator-extended";
 import { EventCategory } from "../../event-category";
 
 export class CreateEventDto {
@@ -19,13 +20,15 @@ export class CreateEventDto {
   @IsString()
   description?: string;
 
-  @IsDateString()
-  @MinDate(() => new Date(), { message: "startAt deve essere nel futuro" })
-  startAt!: string;
+  @Type(() => Date)
+  @IsDate()
+  @FutureDate()
+  startAt!: Date;
 
-  @IsDateString()
-  @MinDate(new Date(), { message: "endAt deve essere nel futuro" })
-  endAt!: string;
+  @Type(() => Date)
+  @IsDate()
+  @FutureDate()
+  endAt!: Date;
 
   @IsString()
   location!: string;

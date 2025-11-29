@@ -7,7 +7,6 @@ import {
   input,
   output,
   Signal,
-  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -81,8 +80,8 @@ export class EventForm {
       title: formValue.title,
       description: formValue.description,
       location: formValue.location,
-      startAt: start.toISOString(),
-      endAt: end.toISOString(),
+      startAt: start,
+      endAt: end,
       maxParticipants: Number(formValue.maxParticipants),
       category: formValue.category,
     };
