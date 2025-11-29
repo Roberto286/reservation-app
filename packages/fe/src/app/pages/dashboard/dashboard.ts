@@ -25,18 +25,24 @@ export class Dashboard {
       this.categories.set(categories);
     });
 
-    this.http.get<GetEventsDto>('/events').subscribe((events) => {
+    this.fetchEvents();
+  }
+
+  private fetchEvents(category?: EventCategory) {
+    this.http.get<GetEventsDto>(`/events/${category ?? ''}`).subscribe((events) => {
       this.events.set(events);
     });
   }
 
   onCategorySelected(category: EventCategory | null) {
-    this.http.get<GetEventsDto>(`/events/${category}`).subscribe((events) => {
-      this.events.set(events);
-    });
+    this.fetchEvents(category ?? undefined);
   }
 
   onNewEvent() {
     this.showModal.set(true);
+  }
+
+  onNewEventCreated() {
+    this.fetchEvents();
   }
 }
