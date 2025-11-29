@@ -91,11 +91,11 @@
           Prenotazione... } @else { Prenota }
         </button>
       </div>
+      @if (bookingState() === 'success') {
+      <p class="text-success text-xs" aria-live="polite">Prenotazione registrata!</p>
+      } @else if (bookingState() === 'error' && bookingError()) {
+      <p class="text-error text-xs" aria-live="assertive" [textContent]="bookingError()"></p>
+      }
     </div>
-    @if (bookingState() === 'success') {
-    <p class="text-success text-xs" aria-live="polite">Prenotazione registrata!</p>
-    } @else if (bookingState() === 'error' && bookingError()) {
-    <p class="text-error text-xs" aria-live="assertive" [textContent]="bookingError()"></p>
-    }
   </div>
 </div>
