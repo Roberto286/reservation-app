@@ -19,4 +19,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   { path: 'logout', loadComponent: () => import('./pages/logout').then((l) => l.Logout) },
+  {
+    path: 'reservations',
+    loadComponent: () => import('./pages/reservations/reservations').then((r) => r.Reservations),
+    canActivate: [authGuard],
+  },
 ];
