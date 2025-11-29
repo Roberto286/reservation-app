@@ -6,7 +6,7 @@ import { EVENT_CATEGORY_LABELS, EventCategory } from '@reservation-app/shared';
   standalone: true,
   imports: [CommonModule],
   template: ` <div class="w-full mt-4 flex justify-center" role="tablist">
-    <div class="lg:w-3/4 tabs tabs-box justify-between py-2.5 px-12">
+    <div class="lg:w-3/4 tabs tabs-box justify-between py-2.5 px-18">
       @for (category of categories(); track $index) {
       <input
         type="radio"
@@ -16,10 +16,12 @@ import { EVENT_CATEGORY_LABELS, EventCategory } from '@reservation-app/shared';
         [aria-label]="categoryLabels[category]"
         (change)="onCategorySelected(category)"
       />
-      }
+      @if (category !== categories().at(-1)) {
+      <div class="divider divider-horizontal"></div>
+      } }
     </div>
   </div>`,
-  styleUrl: './events-menu.css',
+  styles: [],
 })
 export class EventsMenu {
   categorySelected = output<EventCategory | null>();

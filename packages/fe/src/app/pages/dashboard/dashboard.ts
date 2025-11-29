@@ -5,7 +5,7 @@ import { EventCategory, GetEventsDto } from '@reservation-app/shared';
 import { Button } from '../../components/button/button';
 import { EventCard } from '../../components/event-card/event-card';
 import { EventForm } from '../../components/event-form/event-form';
-import { EventsMenu } from '../../components/events-menu/events-menu';
+import { EventsMenu } from '../../components/events-menu';
 import { Modal } from '../../components/modal/modal';
 
 @Component({
