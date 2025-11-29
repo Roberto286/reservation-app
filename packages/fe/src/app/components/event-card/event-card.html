@@ -1,5 +1,5 @@
-<div class="card bg-base-100 shadow-md w-full max-w-xl">
-  <figure class="h-48 w-full overflow-hidden bg-base-200">
+<div class="card card-sm bg-base-100 shadow-md w-full max-w-lg">
+  <figure class="h-44 w-full overflow-hidden bg-base-200">
     <img
       class="h-full w-full object-cover"
       [src]="placeholderImage"
@@ -7,11 +7,11 @@
       loading="lazy"
     />
   </figure>
-  <div class="card-body gap-4">
-    <div class="flex items-start justify-between gap-3">
+  <div class="card-body gap-3.5">
+    <div class="flex items-start justify-between gap-2.5">
       <div>
-        <h2 class="card-title text-base-content" [textContent]="eventData().title"></h2>
-        <p class="text-sm text-base-content/70" [textContent]="locationLabel()"></p>
+        <h2 class="card-title text-base-content text-base" [textContent]="eventData().title"></h2>
+        <p class="text-xs text-base-content/70" [textContent]="locationLabel()"></p>
       </div>
       @if (isUpcoming()) {
       <div class="badge badge-secondary uppercase text-xs tracking-wide">Upcoming</div>
@@ -20,12 +20,12 @@
 
     @if (eventData().description?.trim()?.length) {
     <p
-      class="text-sm leading-relaxed text-base-content/80 text-ellipsis"
+      class="text-xs leading-relaxed text-base-content/80 text-ellipsis"
       [textContent]="eventData().description"
     ></p>
     }
 
-    <div class="grid gap-2 text-sm">
+    <div class="grid gap-1.5 text-xs">
       <div class="flex items-center gap-2">
         <span class="font-semibold text-base-content">Inizio:</span>
         <span class="text-base-content/80" [textContent]="eventDates().start"></span>
@@ -40,14 +40,16 @@
       </div>
     </div>
 
-    <div class="card-actions flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-      <div class="flex flex-wrap gap-2">
-        <span class="badge badge-outline" [textContent]="categoryLabel()"></span>
+    <div
+      class="card-actions flex-col gap-2.5 pt-1.5 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div class="flex flex-wrap gap-1.5">
+        <span class="badge badge-outline text-xs" [textContent]="categoryLabel()"></span>
         @if (tags().length > 0) { @for (tag of tags(); track tag) {
         <span class="badge badge-dash badge-info text-xs" [textContent]="tag"></span>
         } }
       </div>
-      <div class="text-sm text-base-content/80">
+      <div class="text-xs text-base-content/80">
         Posti disponibili:
         <span class="font-semibold text-base-content" [textContent]="availableSeats()"></span>
         <span
@@ -58,15 +60,15 @@
     </div>
 
     <div
-      class="card-actions mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      class="card-actions mt-1.5 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between"
     >
       <div
         class="text-xs text-base-content/60"
         [textContent]="'Aggiornato: ' + eventDates().updatedAt"
       ></div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5">
         <select
-          class="select select-primary select-sm sm:select-md"
+          class="select select-primary select-sm"
           [disabled]="!canBook()"
           [value]="selectedSeats()"
           (change)="onSeatsChange($event)"
@@ -79,7 +81,7 @@
           }
         </select>
         <button
-          class="btn btn-primary btn-sm sm:btn-md"
+          class="btn btn-primary btn-sm"
           type="button"
           [disabled]="!canBook()"
           (click)="bookSeats()"
@@ -91,9 +93,9 @@
       </div>
     </div>
     @if (bookingState() === 'success') {
-    <p class="text-success text-sm" aria-live="polite">Prenotazione registrata!</p>
+    <p class="text-success text-xs" aria-live="polite">Prenotazione registrata!</p>
     } @else if (bookingState() === 'error' && bookingError()) {
-    <p class="text-error text-sm" aria-live="assertive" [textContent]="bookingError()"></p>
+    <p class="text-error text-xs" aria-live="assertive" [textContent]="bookingError()"></p>
     }
   </div>
 </div>
