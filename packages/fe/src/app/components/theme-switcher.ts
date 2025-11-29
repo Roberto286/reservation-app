@@ -1,7 +1,7 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-type Theme = 'lemonade' | 'business';
+type Theme = 'lemonade' | 'sunset';
 
 @Component({
   selector: 'app-theme-switcher',
@@ -40,7 +40,7 @@ type Theme = 'lemonade' | 'business';
 export class ThemeSwitcher {
   private readonly THEME_STORAGE_KEY = 'theme';
   protected isDarkMode = signal<boolean>(this.loadThemePreference());
-  theme = computed<Theme>(() => (this.isDarkMode() ? 'business' : 'lemonade'));
+  theme = computed<Theme>(() => (this.isDarkMode() ? 'sunset' : 'lemonade'));
 
   constructor() {
     effect(() => {
