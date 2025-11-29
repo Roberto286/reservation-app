@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { SignupRequestDto } from "@reservation-app/shared";
 import * as bcrypt from "bcrypt";
 import { Model } from "mongoose";
 import { User, UserDocument } from "src/schemas/user.schema";
@@ -19,10 +20,16 @@ export class UsersService {
     return this.userModel.findById(userId).exec();
   }
 
-  async createUser(email: string, password: string): Promise<UserDocument> {
+  async createUser(user: SignupRequestDto): Promise<UserDocument> {
+    const { role, email, password } = user;
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const user = new this.userModel({ email, password: hashedPassword });
-    return user.save();
+
+    const newUser = new this.userModel({
+      email,
+      password: hashedPassword,
+      role,
+    });
+    return newUser.save();
   }
 }
