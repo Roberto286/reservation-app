@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import type {
@@ -15,8 +15,8 @@ import { InputComponent } from '../input-component/input-component';
   styleUrl: './authentication-form.css',
 })
 export class AuthenticationForm {
-  @Input() isSigningUp = false;
-  @Output() submitForm = new EventEmitter<AuthenticationFormValue>();
+  isSigningUp = input<boolean>(false);
+  submitForm = output<AuthenticationFormValue>();
   errorMessage = '';
   form: FormGroup<AuthenticationFormGroup>;
 
@@ -29,11 +29,26 @@ export class AuthenticationForm {
     });
   }
 
+  get passwordsMatch(): boolean {
+    if (!this.isSigningUp()) return true;
+    const password = this.form.get('password')?.value;
+    const confirmPassword = this.form.get('confirmPassword')?.value;
+    return password === confirmPassword;
+  }
+
+  get isFormValid(): boolean {
+    return this.form.valid && this.passwordsMatch;
+  }
+
   submit() {
-    if (this.form.valid) {
+    if (this.isFormValid) {
       this.submitForm.emit(this.form.getRawValue());
     } else {
-      this.errorMessage = 'Please fill in all required fields.';
+      if (!this.passwordsMatch) {
+        this.errorMessage = 'Le password non corrispondono.';
+      } else {
+        this.errorMessage = 'Please fill in all required fields.';
+      }
     }
   }
 }
