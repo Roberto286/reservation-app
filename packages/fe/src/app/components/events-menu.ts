@@ -17,7 +17,7 @@ import { EVENT_CATEGORY_LABELS, EventCategory } from '@reservation-app/shared';
         (change)="onCategorySelected(category)"
       />
       @if (category !== categories().at(-1)) {
-      <div class="divider divider-horizontal"></div>
+      <div class="divider divider-horizontal hidden lg:flex"></div>
       } }
     </div>
   </div>`,
