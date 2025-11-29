@@ -1,7 +1,7 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-type Theme = 'light' | 'dark';
+type Theme = 'lemonade' | 'business';
 
 @Component({
   selector: 'app-theme-switcher',
@@ -38,16 +38,33 @@ type Theme = 'light' | 'dark';
   styles: [],
 })
 export class ThemeSwitcher {
-  protected isDarkMode = signal<boolean>(true);
-  theme = computed<Theme>(() => (this.isDarkMode() ? 'dark' : 'light'));
+  private readonly THEME_STORAGE_KEY = 'theme';
+  protected isDarkMode = signal<boolean>(this.loadThemePreference());
+  theme = computed<Theme>(() => (this.isDarkMode() ? 'business' : 'lemonade'));
 
   constructor() {
     effect(() => {
-      document.documentElement.setAttribute('data-theme', this.theme());
+      const currentTheme = this.theme();
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      this.saveThemePreference(currentTheme);
     });
   }
 
   toggleTheme(): void {
     this.isDarkMode.update((value) => !value);
+  }
+
+  private loadThemePreference(): boolean {
+    if (typeof localStorage === 'undefined') {
+      return true; // default to dark mode
+    }
+    const savedTheme = localStorage.getItem(this.THEME_STORAGE_KEY);
+    return savedTheme === 'business' || savedTheme === null; // default to dark mode if not set
+  }
+
+  private saveThemePreference(theme: Theme): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.THEME_STORAGE_KEY, theme);
+    }
   }
 }
