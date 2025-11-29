@@ -51,9 +51,15 @@ export class EventForm {
   private readonly http = inject(HttpClient);
   readonly formSubmitted = output<void>();
 
+  startingDate() {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+  }
+
   protected readonly form: FormGroup<EventFormValue> = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
-    dateTime: ['', Validators.required],
+    dateTime: [this.startingDate(), Validators.required],
     category: [EventCategory.Business, Validators.required],
     location: ['', Validators.required],
     maxParticipants: [0, [Validators.required, Validators.min(1)]],

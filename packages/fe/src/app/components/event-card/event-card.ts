@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import type { EventStatusDto, GetEventDto } from '@reservation-app/shared';
+import type { GetEventDto } from '@reservation-app/shared';
 
 @Component({
   selector: 'app-event-card',
