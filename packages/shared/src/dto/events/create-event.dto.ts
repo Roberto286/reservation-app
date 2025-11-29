@@ -27,9 +27,8 @@ export class CreateEventDto {
   @MinDate(new Date(), { message: "endAt deve essere nel futuro" })
   endAt!: string;
 
-  @IsOptional()
   @IsString()
-  location?: string;
+  location!: string;
 
   @IsInt()
   @IsPositive()
