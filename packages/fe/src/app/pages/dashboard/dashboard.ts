@@ -1,7 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { EventCategory, GetEventsDto } from '@reservation-app/shared';
 import { Button } from '../../components/button/button';
+import { EventCard } from '../../components/event-card/event-card';
 import { EventForm } from '../../components/event-form/event-form';
 import { EventsMenu } from '../../components/events-menu/events-menu';
 import { Modal } from '../../components/modal/modal';
@@ -10,11 +12,11 @@ import { Modal } from '../../components/modal/modal';
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
   styles: [],
-  imports: [EventsMenu, Button, Modal, EventForm],
+  imports: [EventsMenu, Button, Modal, EventForm, CommonModule, EventCard],
 })
 export class Dashboard {
   private readonly http = inject(HttpClient);
-  events: GetEventsDto | null = null;
+  events = signal<GetEventsDto>([]);
   showModal = signal(false);
   categories = signal<EventCategory[]>([]);
 
@@ -27,7 +29,7 @@ export class Dashboard {
   onCategorySelected(category: EventCategory | null) {
     this.http.get<GetEventsDto>(`/events/${category}`).subscribe((events) => {
       console.log('Events for category', category, events);
-      this.events = events;
+      this.events.set(events);
     });
   }
 
