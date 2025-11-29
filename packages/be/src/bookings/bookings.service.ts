@@ -70,7 +70,7 @@ export class BookingsService {
       eventId: event._id,
       attendeeId: attendeeObjectId,
       seats,
-      status: BookingStatus.Pending,
+      status: BookingStatus.Confirmed,
     });
 
     await booking.populate("attendeeId", ["email", "displayName"]);
