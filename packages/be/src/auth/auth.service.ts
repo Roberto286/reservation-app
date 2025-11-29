@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { LoginOkDto } from "@reservation-app/shared";
 import * as bcrypt from "bcrypt";
 import {
   UserWithIdAndWithoutPassword,
@@ -14,12 +15,10 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async login(
-    user: UserWithIdAndWithoutPassword
-  ): Promise<{ access_token: string }> {
+  async login(user: UserWithIdAndWithoutPassword): Promise<LoginOkDto> {
     const payload = { sub: user._id, email: user.email };
     const access_token = await this.jwtService.signAsync(payload);
-    return { access_token };
+    return { access_token, userId: user._id };
   }
 
   async hashPassword(password: string): Promise<string> {

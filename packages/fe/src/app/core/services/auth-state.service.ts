@@ -15,7 +15,11 @@ export class AuthStateService {
     this.authenticated.set(true);
   }
 
-  clearAccessToken() {
+  persistUserId(userId: string) {
+    this.cookieService.set('user_id', userId, undefined, '/');
+  }
+
+  logout() {
     this.cookieService.delete(ACCESS_TOKEN_COOKIE, '/');
     this.authenticated.set(false);
   }
@@ -27,5 +31,10 @@ export class AuthStateService {
   getAccessToken(): string | null {
     const token = this.cookieService.get(ACCESS_TOKEN_COOKIE);
     return token ? token : null;
+  }
+
+  getUserId(): string | null {
+    const userId = this.cookieService.get('user_id');
+    return userId ? userId : null;
   }
 }
