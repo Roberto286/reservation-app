@@ -41,7 +41,6 @@ export class EventsService {
     dto.endAt = event.endAt.toISOString();
     dto.maxParticipants = event.maxParticipants;
     dto.reservedSeats = event.reservedSeats;
-    dto.status = event.status;
     dto.category = event.category;
     dto.tags = event.tags ?? [];
     return dto;
