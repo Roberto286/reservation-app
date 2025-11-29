@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractBearerToken(request: Request): string | undefined {
-    const rawHeader = request.headers["authorization"];
+    const rawHeader = request.headers.authorization;
     const authorization = Array.isArray(rawHeader) ? rawHeader[0] : rawHeader;
     if (!authorization) {
       return undefined;
