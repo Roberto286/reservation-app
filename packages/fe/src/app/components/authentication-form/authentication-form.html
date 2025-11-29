@@ -31,7 +31,9 @@
     ></app-input-component>
     }
 
-    <button class="btn btn-primary w-full" type="submit" [disabled]="form.invalid">Login</button>
+    <button class="btn btn-primary w-full" type="submit" [disabled]="form.invalid">
+      @if (isSigningUp) { Registrati } @else { Accedi }
+    </button>
 
     @if (errorMessage) {
     <div class="error" [textContent]="errorMessage"></div>
