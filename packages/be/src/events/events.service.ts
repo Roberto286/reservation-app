@@ -48,6 +48,7 @@ export class EventsService {
     dto.reservedSeats = event.reservedSeats;
     dto.category = event.category;
     dto.tags = event.tags ?? [];
+    dto.updatedAt = event.updatedAt.toISOString();
     return dto;
   }
 

@@ -3,6 +3,11 @@ import { EventCategory } from "@reservation-app/shared";
 import type { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
 
+export interface EventTimestamps {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 @Schema({ timestamps: true })
 export class Event {
   @Prop({ required: true, minlength: 3, maxlength: 140, trim: true })
@@ -45,5 +50,5 @@ export class Event {
   tags!: string[];
 }
 
-export type EventDocument = HydratedDocument<Event>;
+export type EventDocument = HydratedDocument<Event & EventTimestamps>;
 export const EventSchema = SchemaFactory.createForClass(Event);

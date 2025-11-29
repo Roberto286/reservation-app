@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import type { GetEventDto } from '@reservation-app/shared';
+import { EVENT_CATEGORY_LABELS } from '@reservation-app/shared';
 import { BookingsService } from '../../core/services/bookings.service';
 
 @Component({
@@ -44,6 +45,7 @@ export class EventCard {
     return {
       start: formatter.format(new Date(eventValue.startAt)),
       end: formatter.format(new Date(eventValue.endAt)),
+      updatedAt: formatter.format(new Date(eventValue.updatedAt)),
     };
   });
 
@@ -62,6 +64,10 @@ export class EventCard {
   });
 
   protected readonly tags = computed(() => this.eventData().tags ?? []);
+
+  protected readonly categoryLabel = computed(() => {
+    return EVENT_CATEGORY_LABELS[this.eventData().category];
+  });
 
   protected readonly placeholderImage = 'https://placehold.co/384x192/png';
 

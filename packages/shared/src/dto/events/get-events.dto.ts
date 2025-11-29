@@ -16,6 +16,7 @@ export class GetEventDto {
   category!: EventCategory;
   organizer!: EventOrganizerDto;
   tags!: string[];
+  updatedAt!: string;
 }
 
 export type GetEventsDto = GetEventDto[];

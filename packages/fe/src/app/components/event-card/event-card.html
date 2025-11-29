@@ -42,7 +42,7 @@
 
     <div class="card-actions flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex flex-wrap gap-2">
-        <span class="badge badge-outline" [textContent]="eventData().category"></span>
+        <span class="badge badge-outline" [textContent]="categoryLabel()"></span>
         @if (tags().length > 0) { @for (tag of tags(); track tag) {
         <span class="badge badge-dash badge-info text-xs" [textContent]="tag"></span>
         } }
@@ -62,7 +62,7 @@
     >
       <div
         class="text-xs text-base-content/60"
-        [textContent]="'Aggiornato: ' + eventDates().start"
+        [textContent]="'Aggiornato: ' + eventDates().updatedAt"
       ></div>
       <div class="flex items-center gap-2">
         <select
