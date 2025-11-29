@@ -16,9 +16,14 @@ export class EventsService {
     @InjectModel(Event.name) private readonly eventModel: Model<EventDocument>
   ) {}
 
-  private filterOutPastEvents(events: EventDocument[]): EventDocument[] {
+  private filterOutPastOrFullyBookedEvents(
+    events: EventDocument[]
+  ): EventDocument[] {
     const now = new Date();
-    return events.filter((event) => event.startAt > now);
+    return events.filter(
+      (event) =>
+        event.startAt > now && event.reservedSeats < event.maxParticipants
+    );
   }
 
   private mapEntitiesToDto(events: EventDocument[]): GetEventsDto {
@@ -28,7 +33,7 @@ export class EventsService {
   async getEvents(): Promise<GetEventsDto> {
     const events: EventDocument[] = await this.eventModel.find();
 
-    return this.mapEntitiesToDto(this.filterOutPastEvents(events));
+    return this.mapEntitiesToDto(this.filterOutPastOrFullyBookedEvents(events));
   }
 
   private mapEntityToDto(event: EventDocument): GetEventDto {
@@ -51,7 +56,7 @@ export class EventsService {
       category,
     });
 
-    return this.mapEntitiesToDto(this.filterOutPastEvents(events));
+    return this.mapEntitiesToDto(this.filterOutPastOrFullyBookedEvents(events));
   }
 
   getCategories() {
