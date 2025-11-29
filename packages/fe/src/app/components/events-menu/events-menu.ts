@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output, signal } from '@angular/core';
-import type { EventCategory } from '@reservation-app/shared';
+import { EVENT_CATEGORY_LABELS, EventCategory } from '@reservation-app/shared';
 @Component({
   selector: 'app-events-menu',
   standalone: true,
@@ -13,7 +13,7 @@ import type { EventCategory } from '@reservation-app/shared';
         class="tab"
         [checked]="selectedCategory() === category"
         [name]="category"
-        [aria-label]="category"
+        [aria-label]="categoryLabels[category]"
         (change)="onCategorySelected(category)"
       />
       }
@@ -25,6 +25,7 @@ export class EventsMenu {
   categorySelected = output<EventCategory | null>();
   selectedCategory = signal<EventCategory | null>(null);
   categories = input<EventCategory[]>([]);
+  protected readonly categoryLabels = EVENT_CATEGORY_LABELS;
 
   onCategorySelected(category: EventCategory) {
     this.selectedCategory.set(category);
