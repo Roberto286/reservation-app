@@ -3,13 +3,6 @@ import { EventCategory } from "@reservation-app/shared";
 import type { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
 
-export enum EventStatus {
-  Draft = "DRAFT",
-  Published = "PUBLISHED",
-  Cancelled = "CANCELLED",
-  Completed = "COMPLETED",
-}
-
 @Schema({ timestamps: true })
 export class Event {
   @Prop({ required: true, minlength: 3, maxlength: 140, trim: true })
@@ -41,9 +34,6 @@ export class Event {
 
   @Prop({ type: Number, default: 0, min: 0 })
   reservedSeats!: number;
-
-  @Prop({ type: String, enum: EventStatus, default: EventStatus.Draft })
-  status!: EventStatus;
 
   @Prop({ type: String, enum: EventCategory, required: true })
   category!: EventCategory;
