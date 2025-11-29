@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
   CreateEventDto,
@@ -16,12 +16,19 @@ export class EventsService {
     @InjectModel(Event.name) private readonly eventModel: Model<EventDocument>
   ) {}
 
+  private filterOutPastEvents(events: EventDocument[]): EventDocument[] {
+    const now = new Date();
+    return events.filter((event) => event.startAt > now);
+  }
+
   private mapEntitiesToDto(events: EventDocument[]): GetEventsDto {
     return events.map((event) => this.mapEntityToDto(event));
   }
 
-  getEvents(): Promise<GetEventsDto> {
-    return this.eventModel.find().then(this.mapEntitiesToDto.bind(this));
+  async getEvents(): Promise<GetEventsDto> {
+    const events: EventDocument[] = await this.eventModel.find();
+
+    return this.mapEntitiesToDto(this.filterOutPastEvents(events));
   }
 
   private mapEntityToDto(event: EventDocument): GetEventDto {
@@ -44,7 +51,8 @@ export class EventsService {
     const events = await this.eventModel.find({
       category,
     });
-    return this.mapEntitiesToDto(events);
+
+    return this.mapEntitiesToDto(this.filterOutPastEvents(events));
   }
 
   getCategories() {
