@@ -71,6 +71,9 @@
       <!-- Status -->
       <div class="flex justify-between items-center">
         <span class="text-sm font-medium">Stato:</span>
+        @if (!isOutdated()) {
+        <span class="badge badge-neutral">OUTDATED</span>
+        } @else {
         <span
           class="badge"
           [class.badge-success]="reservationData().status === 'CONFIRMED'"
@@ -79,6 +82,7 @@
         >
           {{ reservationData().status }}
         </span>
+        }
       </div>
 
       <!-- Booking date -->
@@ -89,12 +93,14 @@
     </div>
 
     <!-- Actions -->
+    @if (isOutdated()) {
     <div class="card-actions justify-end mt-4">
       @if (reservationData().status !== 'CANCELLED') {
       <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">Cancella</app-button>
       }
       <app-button [size]="'sm'" [variant]="'accent'" (click)="onEdit()">Modifica</app-button>
     </div>
+    }
   </div>
 </div>
 <app-modal [open]="openConfirmCancelationModal()">

@@ -14,6 +14,7 @@ import { Modal } from '../modal/modal';
 export class ReservationCard {
   private readonly http = inject(HttpClient);
   reservationData = input.required<GetBookingDto>();
+  isOutdated = input<boolean>(true);
   openConfirmCancelationModal = signal(false);
   openEditModal = signal(false);
   newSeats = signal(0);
