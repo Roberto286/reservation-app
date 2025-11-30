@@ -1,4 +1,10 @@
 services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
   frontend:
     image: node:24-alpine
     container_name: fe
@@ -23,7 +29,7 @@ services:
     container_name: mongodb
     restart: always
     ports:
-      - "3007:27017"
+      - "3009:27017"
     volumes:
       - mongodb_data:/data/db
     environment:
@@ -40,7 +46,7 @@ services:
       - be_node_modules:/app/node_modules
       - be_pnpm_store:/root/.local/share/pnpm/store
     ports:
-      - "3000:3000"
+      - "3008:3000"
     command: sh -c "corepack enable && pnpm i && pnpm run start:dev"
     environment:
       - NODE_ENV=development
