@@ -16,5 +16,5 @@ export class Navbar {
   protected readonly navbarRoutes = NAVBAR_ROUTES;
   private readonly authService = inject(AuthStateService);
 
-  protected readonly isLoggedIn = this.authService.isAuthenticated();
+  protected readonly isLoggedIn = this.authService.isAuthenticated;
 }
