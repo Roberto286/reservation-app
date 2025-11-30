@@ -103,4 +103,16 @@ export class BookingsService {
     }
     return this.DEFAULT_ERROR_MESSAGE;
   }
+
+  getUserBookings(): Observable<GetBookingDto[]> {
+    const userId = this.authState.getUserId();
+    if (!userId) {
+      return of([]);
+    }
+    return this.http.get<GetBookingDto[]>(`/bookings/${userId}`);
+  }
+
+  hasUserBookedEvent(eventId: string, userBookings: GetBookingDto[]): boolean {
+    return userBookings.some((booking) => booking.eventId === eventId);
+  }
 }

@@ -8,7 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import type { GetEventDto } from '@reservation-app/shared';
+import type { GetBookingDto, GetEventDto } from '@reservation-app/shared';
 import { EVENT_CATEGORY_LABELS } from '@reservation-app/shared';
 import { AuthStateService } from '../../core/services/auth-state.service';
 import { BookingsService } from '../../core/services/bookings.service';
@@ -31,7 +31,20 @@ export class EventCard {
   protected readonly bookingError = signal<string | null>(null);
   protected readonly selectedSeats = signal<number>(1);
   protected readonly isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
+  protected readonly userBookings = signal<GetBookingDto[]>([]);
   isEditing = output<GetEventDto>();
+
+  constructor() {
+    if (!this.isAdmin) {
+      this.bookingsService.getUserBookings().subscribe((bookings) => {
+        this.userBookings.set(bookings);
+      });
+    }
+  }
+
+  protected readonly hasAlreadyBooked = computed(() => {
+    return this.bookingsService.hasUserBookedEvent(this.eventData().id, this.userBookings());
+  });
 
   protected readonly isUpcoming = computed(() => {
     const start = new Date(this.eventData().startAt).getTime();
@@ -77,7 +90,10 @@ export class EventCard {
   protected readonly placeholderImage = 'https://placehold.co/384x192/png';
 
   protected readonly canBook = computed(
-    () => this.bookingsService.canBook(this.eventData(), this.bookingState()) && !this.isAdmin
+    () =>
+      this.bookingsService.canBook(this.eventData(), this.bookingState()) &&
+      !this.isAdmin &&
+      !this.hasAlreadyBooked()
   );
 
   protected readonly seatsOptions = computed(() => {
@@ -93,6 +109,12 @@ export class EventCard {
     this.bookingsService.bookSeats(this.eventData().id, this.selectedSeats(), {
       onStateChange: (state) => {
         this.bookingState.set(state);
+        if (state === 'success') {
+          // Ricarica le prenotazioni dopo una prenotazione riuscita
+          this.bookingsService.getUserBookings().subscribe((bookings) => {
+            this.userBookings.set(bookings);
+          });
+        }
         this.eventBooked.emit();
       },
       onErrorMessage: (message) => this.bookingError.set(message),
