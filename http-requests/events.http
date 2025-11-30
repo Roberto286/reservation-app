@@ -1,1 +1,16 @@
 GET http://localhost:3000/events/categories
+Accept: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjQzMjgxNTQsImV4cCI6MTc2NDMzMTc1NH0.6Z1ASu3QYva0kmu9lN7aTCasHysjygbZvzjx9uiHXtQ
+###
+POST http://localhost:3000/events
+Accept: application/json, text/plain, */*
+uthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjQzNTQ0OTQsImV4cCI6MTc2NDM1ODA5NH0.tEOYXw9XGJc2Z6GNmuHe6pNMB6EUoRgRo-gtx68S1vw
+{
+    "title": "prova",
+    "description": "prova",
+    "location": "roma",
+    "startAt": "2025-11-28T19:00:00.000Z",
+    "endAt": "2025-11-28T21:00:00.000Z",
+    "maxParticipants": "5",
+    "category": "BUSINESS"
+}

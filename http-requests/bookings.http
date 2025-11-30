@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3000
+@token = REPLACE_WITH_VALID_JWT
+@eventId = 000000000000000000000000
+@bookingId = 000000000000000000000000
+
+### Crea una prenotazione per l'evento indicato
+POST {{baseUrl}}/events/{{eventId}}/bookings
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "seats": 1,
+  "note": "Prenotazione di test"
+}
+
+### Elenca le prenotazioni dell'evento (includendo il conteggio posti disponibili)
+GET {{baseUrl}}/events/{{eventId}}/bookings?page=1&pageSize=10
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Aggiorna i posti prenotati
+PATCH {{baseUrl}}/bookings/{{bookingId}}
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "seats": 2,
+  "status": "CONFIRMED"
+}
+
+### Cancella una prenotazione esistente
+POST {{baseUrl}}/bookings/{{bookingId}}/cancel
+Authorization: Bearer {{token}}
+Accept: application/json
