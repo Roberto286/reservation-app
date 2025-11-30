@@ -100,4 +100,16 @@ export class EventsService {
   deleteEvent(id: string) {
     return this.eventModel.findByIdAndDelete(id).exec();
   }
+
+  async getUnavailableEvents(category?: EventCategory): Promise<GetEventsDto> {
+    const filter = category ? { category } : {};
+    const events: EventDocument[] = await this.eventModel.find(filter);
+    const now = new Date();
+    const unavailableEvents = events.filter(
+      (event) =>
+        event.startAt <= now || event.reservedSeats >= event.maxParticipants
+    );
+
+    return this.mapEntitiesToDto(unavailableEvents);
+  }
 }

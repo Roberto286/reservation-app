@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import {
@@ -39,6 +40,13 @@ export class EventsController {
   @Get("categories")
   getCategories() {
     return this.eventsService.getCategories();
+  }
+
+  @Get("unavailable")
+  getUnavailableEvents(
+    @Query("category") category?: EventCategory
+  ): Promise<GetEventsDto> {
+    return this.eventsService.getUnavailableEvents(category);
   }
 
   @Get("/:category")

@@ -66,6 +66,7 @@ export class Dashboard {
 
     return result;
   });
+  unavailableEvents = signal<GetEventsDto>([]);
 
   constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
@@ -76,8 +77,17 @@ export class Dashboard {
   }
 
   private fetchEvents(category?: EventCategory) {
-    this.http.get<GetEventsDto>(`/events/${category ?? ''}`).subscribe((events) => {
+    const url = category ? `/events/${category}` : '/events';
+    this.http.get<GetEventsDto>(url).subscribe((events) => {
       this.events.set(events);
+    });
+    this.fetchUnavailableEvents(category);
+  }
+
+  private fetchUnavailableEvents(category?: EventCategory) {
+    const url = category ? `/events/unavailable?category=${category}` : '/events/unavailable';
+    this.http.get<GetEventsDto>(url).subscribe((events) => {
+      this.unavailableEvents.set(events);
     });
   }
 
