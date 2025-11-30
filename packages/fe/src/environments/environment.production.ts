@@ -1,4 +1,4 @@
 export const environment = {
-  beBaseUrl: 'http://backend:3008',
+  beBaseUrl: 'https://reservations-app.sda.pp.ua/api',
   production: true,
 };
