@@ -1,6 +1,18 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
-import type { EventCategory, GetEventsDto } from "@reservation-app/shared";
-import { CreateEventDto } from "@reservation-app/shared";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from "@nestjs/common";
+import {
+  CreateEventDto,
+  EventCategory,
+  GetEventsDto,
+  UpdateEventDto,
+} from "@reservation-app/shared";
 import { AuthGuard } from "src/auth/auth.guard";
 import { EventsService } from "./events.service";
 
@@ -29,5 +41,11 @@ export class EventsController {
     @Param("category") category: EventCategory
   ): Promise<GetEventsDto> {
     return this.eventsService.getEventsByCategory(category);
+  }
+
+  @Put("/:id")
+  updateEvent(@Param("id") id: string, @Body() body: UpdateEventDto) {
+    console.log("body :>> ", body);
+    return this.eventsService.updateEvent(id, body);
   }
 }

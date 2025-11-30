@@ -1,11 +1,13 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
   CreateEventDto,
   EventCategory,
   GetEventDto,
   type GetEventsDto,
+  UpdateEventDto,
 } from "@reservation-app/shared";
+import console from "console";
 import type { Model } from "mongoose";
 import type { EventDocument } from "src/schemas/event.schema";
 import { Event } from "src/schemas/event.schema";
@@ -67,5 +69,18 @@ export class EventsService {
   createEvent(body: CreateEventDto): Promise<EventDocument> {
     const event = new this.eventModel(body);
     return event.save();
+  }
+
+  async updateEvent(id: string, body: UpdateEventDto): Promise<GetEventDto> {
+    const event = await this.eventModel.findById(id).exec();
+
+    if (!event) {
+      throw new NotFoundException(`Event with id ${id} not found`);
+    }
+
+    Object.assign(event, body);
+    const updatedEvent = await event.save();
+
+    return this.mapEntityToDto(updatedEvent);
   }
 }
