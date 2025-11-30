@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { SignupRequestDto } from "@reservation-app/shared";
 import * as bcrypt from "bcrypt";
@@ -22,6 +22,13 @@ export class UsersService {
 
   async createUser(user: SignupRequestDto): Promise<UserDocument> {
     const { role, email, password } = user;
+
+    // Verifica se esiste già un utente con questa email
+    const existingUser = await this.findByEmail(email);
+    if (existingUser) {
+      throw new ConflictException("Un utente con questa email esiste già");
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
