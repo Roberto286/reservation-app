@@ -93,7 +93,7 @@
       @if (reservationData().status !== 'CANCELLED') {
       <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">Cancella</app-button>
       }
-      <app-button [size]="'sm'" [variant]="'accent'">Modifica</app-button>
+      <app-button [size]="'sm'" [variant]="'accent'" (click)="onEdit()">Modifica</app-button>
     </div>
   </div>
 </div>
@@ -106,6 +106,40 @@
         >Annulla</app-button
       >
       <app-button [variant]="'error'" (click)="onConfirmCancel()">Cancella</app-button>
+    </div>
+  </div>
+</app-modal>
+<app-modal [open]="openEditModal()">
+  <div class="flex flex-col gap-4">
+    <h2 class="modal-title">Modifica Prenotazione</h2>
+
+    <!-- Counter per i posti -->
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium">Numero di posti:</label>
+      <div class="flex items-center gap-4 justify-center">
+        <app-button
+          [variant]="'accent'"
+          [size]="'sm'"
+          (click)="decrementSeats()"
+          [disabled]="newSeats() <= 1"
+        >
+          -
+        </app-button>
+        <input
+          type="number"
+          [value]="newSeats()"
+          (input)="onSeatsChange($event)"
+          min="1"
+          class="input input-md w-20 text-center text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        />
+        <app-button [variant]="'accent'" [size]="'sm'" (click)="incrementSeats()"> + </app-button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions flex gap-2 justify-end mt-4">
+      <app-button [variant]="'ghost'" (click)="openEditModal.set(false)"> Annulla </app-button>
+      <app-button [variant]="'primary'" (click)="onConfirmEdit()"> Conferma </app-button>
     </div>
   </div>
 </app-modal>
