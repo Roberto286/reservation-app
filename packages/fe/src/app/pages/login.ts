@@ -28,8 +28,7 @@ export class Login {
   handleSubmit(formValue: AuthenticationFormValue) {
     this.http.post<LoginOkDto>('/auth/login', formValue).subscribe({
       next: (res) => {
-        this.authState.persistAccessToken(res.access_token);
-        this.authState.persistUserId(res.userId);
+        this.authState.login(res);
         this.router.navigate(['/dashboard']);
       },
       error: () => {

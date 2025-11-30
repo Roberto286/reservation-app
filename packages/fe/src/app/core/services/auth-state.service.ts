@@ -1,5 +1,7 @@
 import { computed, Injectable, inject, signal } from '@angular/core';
+import { LoginOkDto } from '@reservation-app/shared';
 import { CookieService } from 'ngx-cookie-service';
+import { UserRole } from '../../pages/signup';
 
 const ACCESS_TOKEN_COOKIE = 'access_token';
 
@@ -7,15 +9,22 @@ const ACCESS_TOKEN_COOKIE = 'access_token';
 export class AuthStateService {
   private readonly cookieService = inject(CookieService);
   private readonly authenticated = signal(this.cookieService.check(ACCESS_TOKEN_COOKIE));
+  private readonly userRole = signal<UserRole>(UserRole.User);
 
   readonly isAuthenticated = computed(() => this.authenticated());
 
-  persistAccessToken(token: string) {
+  login(res: LoginOkDto) {
+    this.persistAccessToken(res.access_token);
+    this.persistUserId(res.userId);
+    this.userRole.set(res.userRole);
+  }
+
+  private persistAccessToken(token: string) {
     this.cookieService.set(ACCESS_TOKEN_COOKIE, token, undefined, '/');
     this.authenticated.set(true);
   }
 
-  persistUserId(userId: string) {
+  private persistUserId(userId: string) {
     this.cookieService.set('user_id', userId, undefined, '/');
   }
 

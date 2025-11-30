@@ -5,7 +5,7 @@ import { SignupRequestDto } from '@reservation-app/shared';
 import { AuthenticationForm } from '../components/authentication-form/authentication-form';
 import { AuthenticationFormValue } from '../types/authentication-form';
 
-enum UserRole {
+export enum UserRole {
   User = 'user',
   Admin = 'admin',
 }
