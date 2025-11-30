@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      - TUNNEL_TOKEN_FE=${TUNNEL_TOKEN}
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN_FE}
     networks:
       - app-network
   cloudflared-be:
@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      - TUNNEL_TOKEN_BE=${TUNNEL_TOKEN}
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN_BE}
     networks:
       - app-network
 
