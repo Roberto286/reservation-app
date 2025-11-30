@@ -26,10 +26,6 @@ import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class BookingsService {
-  private readonly DEFAULT_PAGE = 1;
-  private readonly DEFAULT_PAGE_SIZE = 20;
-  private readonly MAX_PAGE_SIZE = 50;
-
   constructor(
     @InjectModel(Booking.name)
     private readonly bookingModel: Model<BookingDocument>,
@@ -74,6 +70,7 @@ export class BookingsService {
     });
 
     await booking.populate("attendeeId", ["email", "displayName"]);
+    await booking.populate("eventId", ["title", "location", "startAt"]);
     return this.mapBookingToDto(booking);
   }
 
@@ -82,12 +79,8 @@ export class BookingsService {
     query: EventBookingsQueryDto
   ): Promise<EventBookingsResponseDto> {
     const event = await this.getEventOrThrow(eventId);
-    const page = this.normalizePage(query?.page);
-    const pageSize = this.normalizePageSize(query?.pageSize);
 
-    type BookingFilter = Parameters<Model<BookingDocument>["find"]>[0];
-
-    const filter: BookingFilter = {
+    const filter: Record<string, unknown> = {
       eventId: event._id,
     };
 
@@ -100,28 +93,22 @@ export class BookingsService {
         query.attendeeEmail.trim()
       );
       if (!attendee) {
-        return this.createEmptyBookingsResponse(event, page, pageSize);
+        throw new NotFoundException("Utente non trovato");
       }
       filter.attendeeId = attendee._id;
     }
 
-    const [bookings, total] = await Promise.all([
-      this.bookingModel
-        .find(filter)
-        .sort({ createdAt: -1 })
-        .skip((page - 1) * pageSize)
-        .limit(pageSize)
-        .populate("attendeeId", ["email", "displayName"])
-        .exec(),
-      this.bookingModel.countDocuments(filter),
-    ]);
+    const bookings = await this.bookingModel
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .populate("attendeeId", ["email", "displayName"])
+      .populate("eventId", ["title", "location", "startAt"])
+      .exec();
 
     const response = new EventBookingsResponseDto();
     response.eventId = event._id.toString();
     response.items = bookings.map((booking) => this.mapBookingToDto(booking));
-    response.page = page;
-    response.pageSize = pageSize;
-    response.total = total;
+    response.total = bookings.length;
     response.availableSeats = this.calculateAvailableSeats(event);
     return response;
   }
@@ -161,6 +148,7 @@ export class BookingsService {
 
     const saved = await booking.save();
     await saved.populate("attendeeId", ["email", "displayName"]);
+    await saved.populate("eventId", ["title", "location", "startAt"]);
     return this.mapBookingToDto(saved);
   }
 
@@ -186,6 +174,7 @@ export class BookingsService {
 
     const saved = await booking.save();
     await saved.populate("attendeeId", ["email", "displayName"]);
+    await saved.populate("eventId", ["title", "location", "startAt"]);
     return this.mapBookingToDto(saved);
   }
 
@@ -222,15 +211,9 @@ export class BookingsService {
       return;
     }
 
-    if (delta > 0) {
-      const event = await this.getEventOrThrow(eventId.toString());
-      await this.incrementReservedSeats(event, delta);
-      return;
-    }
-
     const result = await this.eventModel
       .updateOne(
-        { _id: eventId, reservedSeats: { $gte: Math.abs(delta) } },
+        { _id: eventId, reservedSeats: { $gte: -delta } },
         { $inc: { reservedSeats: delta } }
       )
       .exec();
@@ -242,13 +225,8 @@ export class BookingsService {
     }
   }
 
-  private async getEventOrThrow(
-    eventId: string | Types.ObjectId
-  ): Promise<EventDocument> {
-    const id =
-      typeof eventId === "string"
-        ? this.toObjectId(eventId, "eventId")
-        : eventId;
+  private async getEventOrThrow(eventId: string): Promise<EventDocument> {
+    const id = this.toObjectId(eventId, "eventId");
     const event = await this.eventModel.findById(id).exec();
     if (!event) {
       throw new NotFoundException("Evento non trovato");
@@ -281,25 +259,35 @@ export class BookingsService {
   private mapBookingToDto(booking: BookingDocument): GetBookingDto {
     const dto = new GetBookingDto();
     dto.id = booking._id.toString();
-    dto.eventId = booking.eventId.toString();
     dto.seats = booking.seats;
     dto.status = booking.status;
     dto.createdAt = booking.createdAt?.toISOString();
     dto.updatedAt = booking.updatedAt?.toISOString();
     dto.cancelledAt = booking.cancelledAt?.toISOString();
 
+    const event = booking.eventId as unknown as EventDocument | Types.ObjectId;
+    if (event instanceof Types.ObjectId) {
+      dto.eventId = event.toString();
+    } else {
+      dto.eventId = event._id.toString();
+      dto.eventDetail = {
+        title: event.title,
+        location: event.location,
+        startAt: event.startAt.toISOString(),
+      };
+    }
+
     const attendee = booking.attendeeId as UserDocument | Types.ObjectId;
-    dto.attendee = {
-      id:
-        attendee instanceof Types.ObjectId
-          ? attendee.toString()
-          : attendee._id.toString(),
-      email: attendee instanceof Types.ObjectId ? undefined : attendee.email,
-      displayName:
-        attendee instanceof Types.ObjectId
-          ? undefined
-          : (attendee as UserDocument & { displayName?: string }).displayName,
-    };
+    if (attendee instanceof Types.ObjectId) {
+      dto.attendee = { id: attendee.toString() };
+    } else {
+      dto.attendee = {
+        id: attendee._id.toString(),
+        email: attendee.email,
+        displayName: (attendee as UserDocument & { displayName?: string })
+          .displayName,
+      };
+    }
 
     return dto;
   }
@@ -318,38 +306,18 @@ export class BookingsService {
     return new Types.ObjectId(value);
   }
 
-  private normalizePage(value?: number | string): number {
-    const parsed = Number(value);
-    if (!Number.isFinite(parsed) || parsed < 1) {
-      return this.DEFAULT_PAGE;
-    }
-    return Math.trunc(parsed);
-  }
-
-  private normalizePageSize(value?: number | string): number {
-    const parsed = Number(value);
-    if (!Number.isFinite(parsed) || parsed < 1) {
-      return this.DEFAULT_PAGE_SIZE;
-    }
-    return Math.min(Math.trunc(parsed), this.MAX_PAGE_SIZE);
-  }
-
   private calculateAvailableSeats(event: EventDocument): number {
     return Math.max(event.maxParticipants - event.reservedSeats, 0);
   }
 
-  private createEmptyBookingsResponse(
-    event: EventDocument,
-    page: number,
-    pageSize: number
-  ): EventBookingsResponseDto {
-    const response = new EventBookingsResponseDto();
-    response.eventId = event._id.toString();
-    response.items = [];
-    response.page = page;
-    response.pageSize = pageSize;
-    response.total = 0;
-    response.availableSeats = this.calculateAvailableSeats(event);
-    return response;
+  async getBookingsByAttendee(attendeeId: string): Promise<GetBookingDto[]> {
+    const attendeeObjectId = this.toObjectId(attendeeId, "attendeeId");
+    const bookings = await this.bookingModel
+      .find({ attendeeId: attendeeObjectId })
+      .populate("attendeeId", ["email", "displayName"])
+      .populate("eventId", ["title", "location", "startAt"])
+      .exec();
+
+    return bookings.map((booking) => this.mapBookingToDto(booking));
   }
 }

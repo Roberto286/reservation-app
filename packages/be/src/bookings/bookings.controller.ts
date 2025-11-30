@@ -77,4 +77,11 @@ export class BookingsController {
 
     return this.bookingsService.createBooking(eventId, body, userId);
   }
+
+  @Get(":attendeeId")
+  getBookingsByAttendee(
+    @Param("attendeeId") attendeeId: string
+  ): Promise<GetBookingDto[]> {
+    return this.bookingsService.getBookingsByAttendee(attendeeId);
+  }
 }
