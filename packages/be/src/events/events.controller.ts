@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -47,5 +48,10 @@ export class EventsController {
   updateEvent(@Param("id") id: string, @Body() body: UpdateEventDto) {
     console.log("body :>> ", body);
     return this.eventsService.updateEvent(id, body);
+  }
+
+  @Delete("/:id")
+  deleteEvent(@Param("id") id: string) {
+    return this.eventsService.deleteEvent(id);
   }
 }

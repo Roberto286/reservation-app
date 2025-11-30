@@ -96,4 +96,8 @@ export class EventsService {
 
     return this.mapEntityToDto(updatedEvent);
   }
+
+  deleteEvent(id: string) {
+    return this.eventModel.findByIdAndDelete(id).exec();
+  }
 }
