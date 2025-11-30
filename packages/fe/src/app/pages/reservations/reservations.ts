@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { GetBookingDto } from '@reservation-app/shared';
 import { ReservationCard } from '../../components/reservation-card/reservation-card';
 import { AuthStateService } from '../../core/services/auth-state.service';
@@ -15,6 +15,20 @@ export class Reservations {
   private readonly authService = inject(AuthStateService);
   private readonly userId = this.authService.getUserId();
   protected reservations = signal<GetBookingDto[]>([]);
+
+  protected activeReservations = computed(() => {
+    const now = new Date();
+    return this.reservations().filter(
+      (reservation) => reservation.eventDetail && new Date(reservation.eventDetail.startAt) >= now
+    );
+  });
+
+  protected pastReservations = computed(() => {
+    const now = new Date();
+    return this.reservations().filter(
+      (reservation) => reservation.eventDetail && new Date(reservation.eventDetail.startAt) < now
+    );
+  });
   constructor() {
     this.fetchReservations();
   }

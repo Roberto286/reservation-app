@@ -6,13 +6,46 @@
   @if (reservations().length === 0) {
   <p class="text-base-content/70">Non hai ancora effettuato prenotazioni.</p>
   } @else {
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    @for (reservation of reservations(); track reservation.id) {
-    <app-reservation-card
-      [reservationData]="reservation"
-      (askForFetch)="fetchReservations()"
-    ></app-reservation-card>
-    }
+
+  <!-- Prenotazioni attive -->
+  @if (activeReservations().length > 0) {
+  <div class="collapse collapse-arrow bg-base-200 mb-4">
+    <input type="checkbox" checked />
+    <div class="collapse-title text-xl font-semibold">
+      Prenotazioni attive ({{ activeReservations().length }})
+    </div>
+    <div class="collapse-content">
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 pt-4">
+        @for (reservation of activeReservations(); track reservation.id) {
+        <app-reservation-card
+          [reservationData]="reservation"
+          [isOutdated]="true"
+          (askForFetch)="fetchReservations()"
+        ></app-reservation-card>
+        }
+      </div>
+    </div>
   </div>
   }
+
+  <!-- Prenotazioni passate -->
+  @if (pastReservations().length > 0) {
+  <div class="collapse collapse-arrow bg-base-200">
+    <input type="checkbox" />
+    <div class="collapse-title text-xl font-semibold">
+      Prenotazioni passate ({{ pastReservations().length }})
+    </div>
+    <div class="collapse-content">
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 pt-4">
+        @for (reservation of pastReservations(); track reservation.id) {
+        <app-reservation-card
+          [reservationData]="reservation"
+          [isOutdated]="false"
+          (askForFetch)="fetchReservations()"
+        ></app-reservation-card>
+        }
+      </div>
+    </div>
+  </div>
+  } }
 </div>
