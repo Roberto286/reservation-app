@@ -1,7 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
-import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, input, output } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  type FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { PASSWORD_REGEX } from '@reservation-app/shared';
 import type {
   AuthenticationFormGroup,
   AuthenticationFormValue,
@@ -22,10 +29,25 @@ export class AuthenticationForm {
 
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group<AuthenticationFormGroup>({
-      email: new FormControl<string | null>(null),
-      password: new FormControl<string | null>(null),
+      email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
+      password: new FormControl<string | null>(null, [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(PASSWORD_REGEX),
+      ]),
       confirmPassword: new FormControl<string | null>(null),
       isAdmin: new FormControl<boolean>(false, { nonNullable: true }),
+    });
+
+    // Update confirmPassword validators when isSigningUp changes
+    effect(() => {
+      const confirmPasswordControl = this.form.get('confirmPassword');
+      if (this.isSigningUp()) {
+        confirmPasswordControl?.setValidators([Validators.required]);
+      } else {
+        confirmPasswordControl?.clearValidators();
+      }
+      confirmPasswordControl?.updateValueAndValidity();
     });
   }
 
