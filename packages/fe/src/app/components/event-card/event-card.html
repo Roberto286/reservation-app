@@ -87,7 +87,7 @@
         class="text-xs text-base-content/60"
         [textContent]="'Aggiornato: ' + eventDates().updatedAt"
       ></div>
-      @if (isAdmin) {
+      @if (isAdmin && !unavailable()) {
       <div class="flex items-center gap-1.5">
         <app-button [size]="'sm'" [variant]="'accent'" (click)="onEditEvent()">
           Modifica Evento
