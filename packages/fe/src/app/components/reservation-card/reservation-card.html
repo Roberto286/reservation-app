@@ -156,9 +156,17 @@
           [value]="newSeats()"
           (input)="onSeatsChange($event)"
           min="1"
+          [max]="maxAvailableSeats()"
           class="input input-md w-20 text-center text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        <app-button [variant]="'accent'" [size]="'sm'" (click)="incrementSeats()"> + </app-button>
+        <app-button
+          [variant]="'accent'"
+          [size]="'sm'"
+          (click)="incrementSeats()"
+          [disabled]="newSeats() >= maxAvailableSeats()"
+        >
+          +
+        </app-button>
       </div>
     </div>
 

@@ -131,6 +131,21 @@ export class BookingsService {
     if (typeof dto.seats === "number") {
       const normalized = this.ensureValidSeatCount(dto.seats);
       seatDelta = normalized - booking.seats;
+
+      // Se si stanno aumentando i posti, verificare la disponibilità
+      if (seatDelta > 0) {
+        const event = await this.eventModel.findById(booking.eventId).exec();
+        if (!event) {
+          throw new NotFoundException("Evento non trovato");
+        }
+        const availableSeats = this.calculateAvailableSeats(event);
+        if (seatDelta > availableSeats) {
+          throw new ConflictException(
+            `Posti insufficienti. Disponibili: ${availableSeats}, richiesti: ${seatDelta}`
+          );
+        }
+      }
+
       booking.seats = normalized;
     }
 
@@ -280,6 +295,8 @@ export class BookingsService {
         title: event.title,
         location: event.location,
         startAt: event.startAt.toISOString(),
+        maxParticipants: event.maxParticipants,
+        reservedSeats: event.reservedSeats,
       };
     }
 

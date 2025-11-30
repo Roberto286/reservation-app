@@ -10,6 +10,8 @@ export class BookingEventDetailDto {
   title!: string;
   location?: string;
   startAt!: string;
+  maxParticipants!: number;
+  reservedSeats!: number;
 }
 
 export class GetBookingDto {
