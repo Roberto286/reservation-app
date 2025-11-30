@@ -55,6 +55,7 @@ export class EventForm {
   private readonly http = inject(HttpClient);
   readonly formSubmitted = output<void>();
   eventData = input<GetEventDto | null>(null);
+  isEditMode: Signal<boolean> = computed(() => this.eventData() !== null);
 
   startingDate() {
     const now = new Date();
@@ -120,9 +121,38 @@ export class EventForm {
       return;
     }
 
+    if (this.isEditMode()) {
+      this.updateEvent();
+      return;
+    }
+    this.createEvent();
+  }
+
+  private updateEvent() {
+    const eventId = this.eventData()?.id;
+    if (!eventId) {
+      console.error('Event ID is missing for edit operation.');
+      return;
+    }
     const dto = this.mapFormToDto(this.form.getRawValue());
 
-    this.http.post('/events', dto satisfies CreateEventDto).subscribe({
+    this.http.put(`/events/${eventId}`, dto).subscribe({
+      next: () => {
+        this.onClose.emit();
+        this.formSubmitted.emit();
+      },
+      error: () => {
+        console.error(
+          "Si è verificato un errore durante l'aggiornamento dell'evento. Per favore riprova."
+        );
+      },
+    });
+  }
+
+  private createEvent() {
+    const dto = this.mapFormToDto(this.form.getRawValue()) satisfies CreateEventDto;
+
+    this.http.post('/events', dto).subscribe({
       next: () => {
         this.onClose.emit();
         this.formSubmitted.emit();
