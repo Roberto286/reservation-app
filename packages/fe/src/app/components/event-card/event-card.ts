@@ -29,7 +29,7 @@ export class EventCard {
   protected readonly bookingState = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
   protected readonly bookingError = signal<string | null>(null);
   protected readonly selectedSeats = signal<number>(1);
-  protected readonly isAdmin = this.authService.userRole.toLowerCase() === 'admin';
+  protected readonly isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
 
   protected readonly isUpcoming = computed(() => {
     const start = new Date(this.eventData().startAt).getTime();
