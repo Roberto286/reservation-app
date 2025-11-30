@@ -62,4 +62,8 @@ export class AuthStateService {
   getUserRole(): UserRole {
     return this._userRole();
   }
+
+  getUserEmail(): string | null {
+    return this.getTokenProperty('email', '');
+  }
 }
