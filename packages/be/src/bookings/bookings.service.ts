@@ -71,7 +71,13 @@ export class BookingsService {
     });
 
     await booking.populate("attendeeId", ["email", "displayName"]);
-    await booking.populate("eventId", ["title", "location", "startAt"]);
+    await booking.populate("eventId", [
+      "title",
+      "location",
+      "startAt",
+      "maxParticipants",
+      "reservedSeats",
+    ]);
     return this.mapBookingToDto(booking);
   }
 
@@ -103,7 +109,13 @@ export class BookingsService {
       .find(filter)
       .sort({ createdAt: -1 })
       .populate("attendeeId", ["email", "displayName"])
-      .populate("eventId", ["title", "location", "startAt"])
+      .populate("eventId", [
+        "title",
+        "location",
+        "startAt",
+        "maxParticipants",
+        "reservedSeats",
+      ])
       .exec();
 
     const response = new EventBookingsResponseDto();
@@ -164,7 +176,13 @@ export class BookingsService {
 
     const saved = await booking.save();
     await saved.populate("attendeeId", ["email", "displayName"]);
-    await saved.populate("eventId", ["title", "location", "startAt"]);
+    await saved.populate("eventId", [
+      "title",
+      "location",
+      "startAt",
+      "maxParticipants",
+      "reservedSeats",
+    ]);
     return this.mapBookingToDto(saved);
   }
 
@@ -338,7 +356,13 @@ export class BookingsService {
     const bookings = await this.bookingModel
       .find({ attendeeId: attendeeObjectId })
       .populate("attendeeId", ["email", "displayName"])
-      .populate("eventId", ["title", "location", "startAt"])
+      .populate("eventId", [
+        "title",
+        "location",
+        "startAt",
+        "maxParticipants",
+        "reservedSeats",
+      ])
       .exec();
 
     return bookings.map((booking) => this.mapBookingToDto(booking));
