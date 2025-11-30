@@ -56,9 +56,10 @@ export class ReservationCard {
   }
 
   incrementSeats() {
-    if (this.newSeats() < this.maxAvailableSeats()) {
-      this.newSeats.update((seats) => seats + 1);
+    if (this.newSeats() >= this.maxAvailableSeats()) {
+      return;
     }
+    this.newSeats.update((seats) => seats + 1);
   }
 
   decrementSeats() {
@@ -69,15 +70,17 @@ export class ReservationCard {
 
   onSeatsChange(event: Event) {
     const value = parseInt((event.target as HTMLInputElement).value, 10);
-    const max = this.maxAvailableSeats();
     if (!Number.isNaN(value) && value >= 1) {
-      this.newSeats.set(Math.min(value, max));
+      this.newSeats.set(value);
     } else if ((event.target as HTMLInputElement).value === '') {
       this.newSeats.set(1);
     }
   }
 
   onConfirmEdit() {
+    if (this.newSeats() > this.maxAvailableSeats()) {
+      return;
+    }
     this.openEditModal.set(false);
     this.http
       .patch(`/bookings/${this.reservationData().id}`, { seats: this.newSeats() })

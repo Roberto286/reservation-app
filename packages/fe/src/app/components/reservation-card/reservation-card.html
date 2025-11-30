@@ -173,7 +173,13 @@
     <!-- Actions -->
     <div class="modal-actions flex gap-2 justify-end mt-4">
       <app-button [variant]="'ghost'" (click)="openEditModal.set(false)"> Annulla </app-button>
-      <app-button [variant]="'primary'" (click)="onConfirmEdit()"> Conferma </app-button>
+      <app-button
+        [variant]="'primary'"
+        (click)="onConfirmEdit()"
+        [disabled]="newSeats() > maxAvailableSeats()"
+      >
+        Conferma
+      </app-button>
     </div>
   </div>
 </app-modal>
