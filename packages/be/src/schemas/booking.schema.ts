@@ -39,3 +39,11 @@ export type BookingDocument = HydratedDocument<Booking>;
 export const BookingSchema = SchemaFactory.createForClass(Booking);
 
 BookingSchema.index({ eventId: 1, status: 1 });
+// BookingSchema.virtual("eventDetail", {
+//   ref: "Event", // il modello a cui fare riferimento
+//   localField: "eventId", // campo nel Booking
+//   foreignField: "_id", // campo nell'Event
+//   justOne: true, // perché ogni booking ha un solo evento
+// });
+// BookingSchema.set("toObject", { virtuals: true });
+// BookingSchema.set("toJSON", { virtuals: true });

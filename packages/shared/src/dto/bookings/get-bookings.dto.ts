@@ -1,7 +1,4 @@
-import type {
-  BookingPaymentStatusDto,
-  BookingStatusDto,
-} from "./booking-status";
+import type { BookingStatusDto } from "./booking-status";
 
 export class BookingAttendeeDto {
   id!: string;
@@ -9,13 +6,19 @@ export class BookingAttendeeDto {
   displayName?: string;
 }
 
+export class BookingEventDetailDto {
+  title!: string;
+  location?: string;
+  startAt!: string;
+}
+
 export class GetBookingDto {
   id!: string;
   eventId!: string;
+  eventDetail?: BookingEventDetailDto;
   attendee!: BookingAttendeeDto;
   seats!: number;
   status!: BookingStatusDto;
-  paymentStatus!: BookingPaymentStatusDto;
   note?: string;
   createdAt!: string;
   updatedAt!: string;
