@@ -17,6 +17,8 @@ export class InputPassword {
   readonly onFocus = output<void>();
   capsLockOn = signal(false);
   passwordRegex = PASSWORD_REGEX;
+  // Remove ^ and $ anchors for HTML pattern attribute (which adds them automatically)
+  passwordPattern = PASSWORD_REGEX.source.replace(/^\^|\$$/g, '');
 
   protected handleInput(event: Event): void {
     this.valueChange.emit(event);
