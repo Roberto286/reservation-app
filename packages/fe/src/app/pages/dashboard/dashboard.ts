@@ -21,7 +21,7 @@ export class Dashboard {
   protected events = signal<GetEventsDto>([]);
   protected showModal = signal(false);
   protected categories = signal<EventCategory[]>([]);
-  protected isAdmin = this.authService.userRole.toLowerCase() === 'admin';
+  protected isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
 
   constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {

@@ -31,6 +31,7 @@ export class AuthStateService {
 
   login(res: LoginOkDto) {
     this.persistAccessToken(res.access_token);
+    this._userRole.set(this.getTokenProperty('role', UserRole.User));
   }
 
   private persistAccessToken(token: string) {
@@ -58,7 +59,7 @@ export class AuthStateService {
     return this.getTokenProperty('sub', '');
   }
 
-  get userRole(): UserRole {
+  getUserRole(): UserRole {
     return this._userRole();
   }
 }
