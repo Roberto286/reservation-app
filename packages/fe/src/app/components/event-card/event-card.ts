@@ -33,6 +33,7 @@ export class EventCard {
   protected readonly isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
   protected readonly userBookings = signal<GetBookingDto[]>([]);
   isEditing = output<GetEventDto>();
+  unavailable = input<boolean>(false);
 
   constructor() {
     if (!this.isAdmin) {

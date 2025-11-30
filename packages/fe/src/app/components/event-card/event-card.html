@@ -95,7 +95,9 @@
       </div>
       } @else {
       <div class="flex items-center gap-1.5">
-        @if (hasAlreadyBooked()) {
+        @if(unavailable()) {
+        <p class="text-error text-xs font-semibold">Evento non disponibile</p>
+        } @else if (hasAlreadyBooked()) {
         <p class="text-info text-xs font-semibold">Hai già prenotato questo evento</p>
         } @else {
         <select
@@ -111,6 +113,7 @@
           ></option>
           }
         </select>
+        @if(!unavailable()){
         <button
           class="btn btn-primary btn-sm"
           type="button"
@@ -121,7 +124,7 @@
           <span class="loading loading-spinner loading-xs"></span>
           Prenotazione... } @else { Prenota }
         </button>
-        }
+        }}
       </div>
       } @if (bookingState() === 'success') {
       <p class="text-success text-xs" aria-live="polite">Prenotazione registrata!</p>
