@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { EventCategory, GetEventDto, GetEventsDto } from '@reservation-app/shared';
 import { Button } from '../../components/button/button';
 import { EventCard } from '../../components/event-card/event-card';
@@ -23,6 +23,7 @@ export class Dashboard {
   protected categories = signal<EventCategory[]>([]);
   protected isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
   protected readonly eventData = signal<GetEventDto | null>(null);
+  protected isEditing = computed(() => this.eventData() !== null);
 
   constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {

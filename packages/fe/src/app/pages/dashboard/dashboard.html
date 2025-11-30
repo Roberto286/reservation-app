@@ -25,7 +25,9 @@
 </div>
 }
 <app-modal [open]="showModal()" [size]="'xl'" (closed)="showModal.set(false)">
-  <div modal-header class="font-bold text-lg">Crea Nuovo Evento</div>
+  <div modal-header class="font-bold text-lg">
+    @if(isEditing()) { Modifica Evento } @else { Crea Nuovo Evento }
+  </div>
   <app-event-form
     [eventData]="eventData()"
     [categories]="categories()"
