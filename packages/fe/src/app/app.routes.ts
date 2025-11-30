@@ -1,6 +1,7 @@
 import type { Routes } from '@angular/router';
 import { authGuard } from './auth-guard';
 import { guestGuard } from './guest-guard';
+import { nonAdminGuard } from './non-admin-guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,6 @@ export const routes: Routes = [
   {
     path: 'reservations',
     loadComponent: () => import('./pages/reservations/reservations').then((r) => r.Reservations),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonAdminGuard],
   },
 ];
