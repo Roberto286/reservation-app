@@ -1,10 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { SignupRequestDto, UserRole } from '@reservation-app/shared';
+import { SignupRequestDto } from '@reservation-app/shared';
 import { AuthenticationForm } from '../components/authentication-form/authentication-form';
 import { AuthenticationFormValue } from '../types/authentication-form';
 
+enum UserRole {
+  User = 'user',
+  Admin = 'admin',
+}
 @Component({
   imports: [AuthenticationForm],
   selector: 'app-signup',
@@ -33,7 +37,7 @@ export class Signup {
     return {
       email: formValue.email ?? '',
       password: formValue.password ?? '',
-      role: formValue.userRole ? UserRole.Admin : UserRole.User,
+      role: formValue.isAdmin ? UserRole.Admin : UserRole.User,
     };
   }
 }

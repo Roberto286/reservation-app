@@ -25,7 +25,7 @@ export class AuthenticationForm {
       email: new FormControl<string | null>(null),
       password: new FormControl<string | null>(null),
       confirmPassword: new FormControl<string | null>(null),
-      userRole: new FormControl<boolean>(false, { nonNullable: true }),
+      isAdmin: new FormControl<boolean>(false, { nonNullable: true }),
     });
   }
 
