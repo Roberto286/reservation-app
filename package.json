@@ -5,6 +5,7 @@
   },
   "scripts": {
     "start:dev": "turbo run start:dev",
-    "start:docker": "docker compose up --build -d"
+    "start:docker": "docker compose up --build -d",
+    "start:docker-prod": "docker compose -f compose.prod.yml up --build -d"
   }
 }
