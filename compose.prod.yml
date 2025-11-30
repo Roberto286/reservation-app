@@ -1,39 +1,10 @@
 services:
-  cloudflared-fe:
+  cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN_FE}
-    networks:
-      - app-network
-  cloudflared-be:
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN_BE}
-    networks:
-      - app-network
-
-  frontend:
-    image: node:24-alpine
-    container_name: fe
-    working_dir: /app
-    volumes:
-      - ./packages/fe:/app
-      - ./packages/shared:/shared
-      - fe_node_modules:/app/node_modules
-      - fe_pnpm_store:/root/.local/share/pnpm/store
-    ports:
-      - "4201:4200"
-    command: >-
-      sh -c "corepack enable && pnpm --dir /shared install && pnpm --dir /shared run build && pnpm install && pnpm run build:prod && pnpm run start:prod"
-    environment:
-      - NODE_ENV=production
-      - NODE_PATH=/app/node_modules
-    depends_on:
-      - backend
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     networks:
       - app-network
 
@@ -57,12 +28,13 @@ services:
     working_dir: /app
     volumes:
       - ./packages/be:/app
+      - ./packages/fe/dist:/app/fe/dist
       - ./packages/shared:/shared
       - be_node_modules:/app/node_modules
       - be_pnpm_store:/root/.local/share/pnpm/store
     ports:
       - "3008:3000"
-    command: sh -c "corepack enable && pnpm i && pnpm run start:prod"
+    command: sh -c "corepack enable && pnpm --dir /shared install && pnpm --dir /shared run build && pnpm --dir ../fe install && pnpm --dir ../fe run build:prod && pnpm i && pnpm run build && pnpm run start:prod"
     environment:
       - NODE_ENV=production
       - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
@@ -76,7 +48,5 @@ networks:
 
 volumes:
   mongodb_data:
-  fe_node_modules:
-  fe_pnpm_store:
   be_node_modules:
   be_pnpm_store:

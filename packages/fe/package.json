@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start:dev": "ng serve --host 0.0.0.0 --configuration development",
-    "start:prod": "npx http-server dist/fe/browser -p 4200 -a 0.0.0.0",
+    "start:prod": "npx http-server dist/fe/browser -p 4200 -a 0.0.0.0 --proxy http://0.0.0.0:4200?",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
