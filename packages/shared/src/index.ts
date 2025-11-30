@@ -8,3 +8,4 @@ export * from "./dto/events/create-event.dto";
 export * from "./dto/events/get-events.dto";
 export * from "./enums/user-role.enum";
 export * from "./event-category";
+export * from "./types/jwt-payload";

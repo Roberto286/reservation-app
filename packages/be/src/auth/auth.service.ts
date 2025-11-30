@@ -16,9 +16,9 @@ export class AuthService {
   ) {}
 
   async login(user: UserWithIdAndWithoutPassword): Promise<LoginOkDto> {
-    const payload = { sub: user._id, email: user.email };
+    const payload = { sub: user._id, email: user.email, role: user.role };
     const access_token = await this.jwtService.signAsync(payload);
-    return { access_token, userId: user._id, userRole: user.role };
+    return { access_token };
   }
 
   async hashPassword(password: string): Promise<string> {
