@@ -56,12 +56,13 @@ RUN pnpm install --filter be --prod --frozen-lockfile
 # Copy built artifacts
 COPY --from=be-builder /build/packages/be/dist ./packages/be/dist
 
-# Copy frontend build
-COPY --from=fe-builder /build/packages/fe/dist/fe/browser ./fe/dist/fe/browser
+# Copy built artifacts
+COPY --from=be-builder /build/packages/be/dist ./packages/be/dist
 
-# Copy shared package
-COPY --from=shared-builder /build/packages/shared/dist ./node_modules/@reservation-app/shared/dist
-COPY --from=shared-builder /build/packages/shared/package.json ./node_modules/@reservation-app/shared/package.json
+# Copy frontend build
+COPY --from=fe-builder /build/packages/fe/dist/fe/browser ./packages/be/fe/dist/fe/browser
+
+WORKDIR /app/packages/be
 
 ENV NODE_ENV=production
 ENV PORT=3000
