@@ -28,7 +28,7 @@ services:
     ports:
       - "4201:4200"
     command: >-
-      sh -c "corepack enable && pnpm --dir /shared install && pnpm --dir /shared run build && pnpm install && pnpm run start:prod"
+      sh -c "corepack enable && pnpm --dir /shared install && pnpm --dir /shared run build && pnpm install && pnpm run build:prod && pnpm run start:prod"
     environment:
       - NODE_ENV=production
       - NODE_PATH=/app/node_modules
