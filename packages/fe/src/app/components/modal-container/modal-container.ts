@@ -43,26 +43,27 @@ export class ModalContainer {
   constructor() {
     effect(() => {
       const modal = this.currentModal();
-      if (modal && this.modalContent) {
-        this.modalContent.clear();
-        const componentRef = createComponent(modal.component, {
-          environmentInjector: this.injector,
-          elementInjector: this.injector,
-        });
 
-        if (
-          modal.data &&
-          componentRef.instance &&
-          typeof componentRef.instance === 'object' &&
-          'data' in componentRef.instance
-        ) {
-          (componentRef.instance as { data: unknown }).data = modal.data;
+      // Wait for next tick to ensure ViewChild is ready
+      setTimeout(() => {
+        if (modal && this.modalContent) {
+          this.modalContent.clear();
+          const componentRef = createComponent(modal.component, {
+            environmentInjector: this.injector,
+            elementInjector: this.injector,
+          });
+
+          // Pass data as component input
+          if (modal.data) {
+            componentRef.setInput('data', modal.data);
+          }
+
+          this.modalContent.insert(componentRef.hostView);
+          componentRef.changeDetectorRef.detectChanges();
+        } else if (!modal && this.modalContent) {
+          this.modalContent.clear();
         }
-
-        this.modalContent.insert(componentRef.hostView);
-      } else if (this.modalContent) {
-        this.modalContent.clear();
-      }
+      });
     });
   }
 
