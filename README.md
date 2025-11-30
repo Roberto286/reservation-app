@@ -2,6 +2,12 @@
 
 Sistema di gestione prenotazioni per eventi con autenticazione multi-ruolo (Admin, Organizer, Attendee).
 
+## 🌐 Demo Live
+
+**[https://reservations-app.sda.pp.ua](https://reservations-app.sda.pp.ua)**
+
+Demo funzionante dell'applicazione in produzione.
+
 ## 🏗️ Architettura
 
 Monorepo PNPM con tre package:
