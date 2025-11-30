@@ -29,6 +29,7 @@ export class Modal {
   readonly hostClasses = computed(() => ({
     modal: true,
     'modal-open': this.open(),
+    'z-50': true,
   }));
 
   readonly modalBoxClasses = computed(() => {

@@ -1,38 +1,22 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { GetBookingDto } from '@reservation-app/shared';
-import { AlertService } from '../../core/services/alert.service';
+import { ModalService } from '../../core/services/modal.service';
 import { Button } from '../button/button';
-import { Modal } from '../modal/modal';
+import { CancelBookingModal, type CancelBookingModalData } from '../modals/cancel-booking-modal';
+import { EditBookingModal, type EditBookingModalData } from '../modals/edit-booking-modal';
 
 @Component({
   selector: 'app-reservation-card',
-  imports: [DatePipe, CommonModule, Button, Modal],
+  imports: [DatePipe, CommonModule, Button],
   templateUrl: './reservation-card.html',
   styleUrl: './reservation-card.css',
 })
 export class ReservationCard {
-  private readonly http = inject(HttpClient);
-  private readonly alertService = inject(AlertService);
+  private readonly modalService = inject(ModalService);
   reservationData = input.required<GetBookingDto>();
   isOutdated = input<boolean>(true);
-  openConfirmCancelationModal = signal(false);
-  openEditModal = signal(false);
-  newSeats = signal(0);
   askForFetch = output<void>();
-  availableSeats = computed(() => {
-    const { maxParticipants, reservedSeats } = this.reservationData().eventDetail || {};
-    if (!maxParticipants || !reservedSeats) return 0;
-    return maxParticipants - reservedSeats;
-  });
-  isCompleteDisabled = computed(() => {
-    return (
-      this.newSeats() > this.maxAvailableSeats() ||
-      this.newSeats() <= 0 ||
-      this.maxAvailableSeats() === 0
-    );
-  });
   unavailable = input(false);
 
   // Verifica se l'evento è scaduto (data passata)
@@ -51,63 +35,21 @@ export class ReservationCard {
     return available + this.reservationData().seats;
   });
 
-  onCancel() {
-    this.openConfirmCancelationModal.set(true);
+  onCancel(): void {
+    const data: CancelBookingModalData = {
+      bookingId: this.reservationData().id,
+      onSuccess: () => this.askForFetch.emit(),
+    };
+    this.modalService.open(CancelBookingModal, data);
   }
 
-  onConfirmCancel() {
-    this.http
-      .delete<{ deletedCount?: number }>(`/bookings/${this.reservationData().id}`)
-      .subscribe({
-        next: () => {
-          this.alertService.success('Prenotazione cancellata con successo!');
-          this.openConfirmCancelationModal.set(false);
-          this.askForFetch.emit();
-        },
-        error: () => {
-          this.alertService.error('Errore durante la cancellazione della prenotazione.');
-        },
-      });
-  }
-
-  onEdit() {
-    this.newSeats.set(this.reservationData().seats);
-    this.openEditModal.set(true);
-  }
-
-  incrementSeats() {
-    if (this.newSeats() >= this.maxAvailableSeats()) {
-      return;
-    }
-    this.newSeats.update((seats) => seats + 1);
-  }
-
-  decrementSeats() {
-    if (this.newSeats() > 1) {
-      this.newSeats.update((seats) => seats - 1);
-    }
-  }
-
-  onSeatsChange(event: Event) {
-    const value = parseInt((event.target as HTMLInputElement).value, 10);
-    this.newSeats.set(value);
-  }
-
-  onConfirmEdit() {
-    if (this.newSeats() <= 0 || this.newSeats() > this.maxAvailableSeats()) {
-      return;
-    }
-    this.openEditModal.set(false);
-    this.http
-      .patch(`/bookings/${this.reservationData().id}`, { seats: this.newSeats() })
-      .subscribe({
-        next: () => {
-          this.alertService.success('Prenotazione modificata con successo!');
-          this.askForFetch.emit();
-        },
-        error: () => {
-          this.alertService.error('Errore durante la modifica della prenotazione.');
-        },
-      });
+  onEdit(): void {
+    const data: EditBookingModalData = {
+      bookingId: this.reservationData().id,
+      currentSeats: this.reservationData().seats,
+      maxAvailableSeats: this.maxAvailableSeats(),
+      onSuccess: () => this.askForFetch.emit(),
+    };
+    this.modalService.open(EditBookingModal, data);
   }
 }

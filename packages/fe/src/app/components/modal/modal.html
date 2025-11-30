@@ -4,6 +4,7 @@
   role="dialog"
   aria-modal="true"
   (click)="onBackdropClick($event)"
+  class="fixed inset-0 z-9999"
 >
   <div [ngClass]="modalBoxClasses()" (click)="$event.stopPropagation()">
     <ng-content select="[modal-header]"></ng-content>
