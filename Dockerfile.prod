@@ -1,27 +1,30 @@
 # Stage 1: Build shared package
 FROM node:24-alpine AS shared-builder
+RUN corepack enable && corepack prepare pnpm@8.14.1 --activate
 WORKDIR /build
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages/shared ./packages/shared
-RUN corepack enable && pnpm install --filter @reservation-app/shared --frozen-lockfile
+RUN pnpm install --filter @reservation-app/shared --frozen-lockfile
 RUN pnpm --filter @reservation-app/shared run build
 
 # Stage 2: Build frontend
 FROM node:24-alpine AS fe-builder
+RUN corepack enable && corepack prepare pnpm@8.14.1 --activate
 WORKDIR /build
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages/fe ./packages/fe
 COPY --from=shared-builder /build/packages/shared ./packages/shared
-RUN corepack enable && pnpm install --filter fe --frozen-lockfile
+RUN pnpm install --filter fe --frozen-lockfile
 RUN pnpm --filter fe run build:prod
 
 # Stage 3: Build backend
 FROM node:24-alpine AS be-builder
+RUN corepack enable && corepack prepare pnpm@8.14.1 --activate
 WORKDIR /build
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages/be ./packages/be
 COPY --from=shared-builder /build/packages/shared ./packages/shared
-RUN corepack enable && pnpm install --filter be --frozen-lockfile
+RUN pnpm install --filter be --frozen-lockfile
 RUN pnpm --filter be run build
 
 # Stage 4: Production image
