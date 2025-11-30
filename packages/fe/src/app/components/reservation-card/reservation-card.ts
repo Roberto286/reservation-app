@@ -2,6 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, input, output, signal } from '@angular/core';
 import { GetBookingDto } from '@reservation-app/shared';
+import { AlertService } from '../../core/services/alert.service';
 import { Button } from '../button/button';
 import { Modal } from '../modal/modal';
 
@@ -13,6 +14,7 @@ import { Modal } from '../modal/modal';
 })
 export class ReservationCard {
   private readonly http = inject(HttpClient);
+  private readonly alertService = inject(AlertService);
   reservationData = input.required<GetBookingDto>();
   isOutdated = input<boolean>(true);
   openConfirmCancelationModal = signal(false);
@@ -28,13 +30,13 @@ export class ReservationCard {
     this.http
       .delete<{ deletedCount?: number }>(`/bookings/${this.reservationData().id}`)
       .subscribe({
-        next: (response) => {
-          console.log('Prenotazione cancellata:', response);
+        next: () => {
+          this.alertService.success('Prenotazione cancellata con successo!');
           this.openConfirmCancelationModal.set(false);
           this.askForFetch.emit();
         },
-        error: (error) => {
-          console.error('Errore durante la cancellazione della prenotazione:', error);
+        error: () => {
+          this.alertService.error('Errore durante la cancellazione della prenotazione.');
         },
       });
   }
@@ -69,10 +71,11 @@ export class ReservationCard {
       .patch(`/bookings/${this.reservationData().id}`, { seats: this.newSeats() })
       .subscribe({
         next: () => {
+          this.alertService.success('Prenotazione modificata con successo!');
           this.askForFetch.emit();
         },
-        error: (error) => {
-          console.error('Errore durante la modifica della prenotazione:', error);
+        error: () => {
+          this.alertService.error('Errore durante la modifica della prenotazione.');
         },
       });
   }

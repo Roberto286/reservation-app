@@ -46,7 +46,6 @@ export class EventsController {
 
   @Put("/:id")
   updateEvent(@Param("id") id: string, @Body() body: UpdateEventDto) {
-    console.log("body :>> ", body);
     return this.eventsService.updateEvent(id, body);
   }
 

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SignupRequestDto } from '@reservation-app/shared';
 import { AuthenticationForm } from '../components/authentication-form/authentication-form';
+import { AlertService } from '../core/services/alert.service';
 import { AuthenticationFormValue } from '../types/authentication-form';
 
 export enum UserRole {
@@ -19,16 +20,19 @@ export enum UserRole {
   styles: [],
 })
 export class Signup {
-  constructor(private readonly http: HttpClient, private readonly router: Router) {}
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly alertService = inject(AlertService);
 
   handleSubmit(formValue: AuthenticationFormValue) {
     const dto = this.mapFormValuesToDto(formValue);
     this.http.post('/users/signup', dto).subscribe({
       next: () => {
+        this.alertService.success('Registrazione completata con successo!');
         this.router.navigate(['/login']);
       },
-      error: (error) => {
-        console.error('Signup failed:', error);
+      error: () => {
+        this.alertService.error('Errore durante la registrazione. Riprova.');
       },
     });
   }

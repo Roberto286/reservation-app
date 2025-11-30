@@ -23,6 +23,7 @@ import {
   EventCategory,
   GetEventDto,
 } from '@reservation-app/shared';
+import { AlertService } from '../../core/services/alert.service';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
 import { Modal } from '../modal/modal';
@@ -55,6 +56,7 @@ export class EventForm {
   protected readonly onClose = output<void>();
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
+  private readonly alertService = inject(AlertService);
   readonly formSubmitted = output<void>();
   eventData = input<GetEventDto | null>(null);
   isEditMode: Signal<boolean> = computed(() => this.eventData() !== null);
@@ -134,18 +136,19 @@ export class EventForm {
   private updateEvent() {
     const eventId = this.eventData()?.id;
     if (!eventId) {
-      console.error('Event ID is missing for edit operation.');
+      this.alertService.error('ID evento mancante per la modifica.');
       return;
     }
     const dto = this.mapFormToDto(this.form.getRawValue());
 
     this.http.put(`/events/${eventId}`, dto).subscribe({
       next: () => {
+        this.alertService.success('Evento aggiornato con successo!');
         this.onClose.emit();
         this.formSubmitted.emit();
       },
       error: () => {
-        console.error(
+        this.alertService.error(
           "Si è verificato un errore durante l'aggiornamento dell'evento. Per favore riprova."
         );
       },
@@ -157,12 +160,13 @@ export class EventForm {
 
     this.http.post('/events', dto).subscribe({
       next: () => {
+        this.alertService.success('Evento creato con successo!');
         this.onClose.emit();
         this.formSubmitted.emit();
         this.form.reset();
       },
       error: () => {
-        console.error(
+        this.alertService.error(
           "Si è verificato un errore durante la creazione dell'evento. Per favore riprova."
         );
       },
@@ -176,18 +180,19 @@ export class EventForm {
   onConfirmDelete() {
     const eventId = this.eventData()?.id;
     if (!eventId) {
-      console.error('Event ID is missing for delete operation.');
+      this.alertService.error('ID evento mancante per la cancellazione.');
       return;
     }
 
     this.http.delete(`/events/${eventId}`).subscribe({
       next: () => {
+        this.alertService.success('Evento eliminato con successo!');
         this.openConfirmDeleteModal.set(false);
         this.onClose.emit();
         this.formSubmitted.emit();
       },
       error: () => {
-        console.error(
+        this.alertService.error(
           "Si è verificato un errore durante l'eliminazione dell'evento. Per favore riprova."
         );
       },
