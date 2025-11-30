@@ -24,6 +24,7 @@ import {
   GetEventDto,
 } from '@reservation-app/shared';
 import { AlertService } from '../../core/services/alert.service';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
 import { Modal } from '../modal/modal';
@@ -61,6 +62,7 @@ export class EventForm {
   eventData = input<GetEventDto | null>(null);
   isEditMode: Signal<boolean> = computed(() => this.eventData() !== null);
   protected openConfirmDeleteModal = signal(false);
+  private readonly authService = inject(AuthStateService);
 
   startingDate() {
     const now = new Date();
@@ -118,6 +120,7 @@ export class EventForm {
       endAt: end,
       maxParticipants: Number(formValue.maxParticipants),
       category: formValue.category,
+      organizerEmail: this.authService.getUserEmail() || '',
     };
   }
 

@@ -1,9 +1,4 @@
 import { EventCategory } from "../../event-category";
-
-export class EventOrganizerDto {
-  email!: string;
-}
-
 export class GetEventDto {
   id!: string;
   title!: string;
@@ -14,7 +9,7 @@ export class GetEventDto {
   maxParticipants!: number;
   reservedSeats!: number;
   category!: EventCategory;
-  organizer!: EventOrganizerDto;
+  organizerEmail!: string;
   tags!: string[];
   updatedAt!: string;
 }

@@ -79,7 +79,7 @@ export class EventCard {
   });
 
   protected readonly organizerEmail = computed(() => {
-    return this.eventData().organizer?.email ?? 'organizer@unknown.dev';
+    return this.eventData().organizerEmail ?? 'Anonimo';
   });
 
   protected readonly tags = computed(() => this.eventData().tags ?? []);

@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import {
   IsDate,
+  IsEmail,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -39,4 +40,7 @@ export class CreateEventDto {
 
   @IsEnum(EventCategory)
   category!: EventCategory;
+
+  @IsEmail()
+  organizerEmail!: string;
 }
