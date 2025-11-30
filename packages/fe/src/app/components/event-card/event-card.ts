@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import type { GetEventDto } from '@reservation-app/shared';
 import { EVENT_CATEGORY_LABELS } from '@reservation-app/shared';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { BookingsService } from '../../core/services/bookings.service';
 
 @Component({
@@ -21,12 +22,14 @@ import { BookingsService } from '../../core/services/bookings.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCard {
-  readonly eventData = input.required<GetEventDto>();
   private readonly bookingsService = inject(BookingsService);
+  private readonly authService = inject(AuthStateService);
+  readonly eventData = input.required<GetEventDto>();
   readonly eventBooked = output<void>();
   protected readonly bookingState = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
   protected readonly bookingError = signal<string | null>(null);
   protected readonly selectedSeats = signal<number>(1);
+  protected readonly isAdmin = this.authService.userRole.toLowerCase() === 'admin';
 
   protected readonly isUpcoming = computed(() => {
     const start = new Date(this.eventData().startAt).getTime();
@@ -71,8 +74,8 @@ export class EventCard {
 
   protected readonly placeholderImage = 'https://placehold.co/384x192/png';
 
-  protected readonly canBook = computed(() =>
-    this.bookingsService.canBook(this.eventData(), this.bookingState())
+  protected readonly canBook = computed(
+    () => this.bookingsService.canBook(this.eventData(), this.bookingState()) && !this.isAdmin
   );
 
   protected readonly seatsOptions = computed(() => {

@@ -18,10 +18,10 @@ import { AuthStateService } from '../../core/services/auth-state.service';
 export class Dashboard {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthStateService);
-  events = signal<GetEventsDto>([]);
-  showModal = signal(false);
-  categories = signal<EventCategory[]>([]);
-  isAdmin = this.authService.userRole.toLowerCase() === 'admin';
+  protected events = signal<GetEventsDto>([]);
+  protected showModal = signal(false);
+  protected categories = signal<EventCategory[]>([]);
+  protected isAdmin = this.authService.userRole.toLowerCase() === 'admin';
 
   constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
