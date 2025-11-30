@@ -1,1 +1,15 @@
-<p>reservations works!</p>
+<div class="container mt-16">
+  <h1 class="text-2xl font-semibold mb-6">Le mie prenotazioni</h1>
+</div>
+
+<div class="container mb-16">
+  @if (reservations().length === 0) {
+  <p class="text-base-content/70">Non hai ancora effettuato prenotazioni.</p>
+  } @else {
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    @for (reservation of reservations(); track reservation.id) {
+    <app-reservation-card [reservationData]="reservation"></app-reservation-card>
+    }
+  </div>
+  }
+</div>
