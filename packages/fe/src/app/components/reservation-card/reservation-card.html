@@ -78,6 +78,10 @@
         <span class="text-sm font-medium">Posti:</span>
         <span class="badge badge-lg">{{ reservationData().seats }}</span>
       </div>
+      <div class="flex justify-between items-center">
+        <span class="text-sm font-medium">Disponibili:</span>
+        <span class="badge badge-lg">{{ maxAvailableSeats() }}</span>
+      </div>
 
       <!-- Status -->
       <div class="flex justify-between items-center">
@@ -173,11 +177,7 @@
     <!-- Actions -->
     <div class="modal-actions flex gap-2 justify-end mt-4">
       <app-button [variant]="'ghost'" (click)="openEditModal.set(false)"> Annulla </app-button>
-      <app-button
-        [variant]="'primary'"
-        (click)="onConfirmEdit()"
-        [disabled]="newSeats() > maxAvailableSeats()"
-      >
+      <app-button [variant]="'primary'" (click)="onConfirmEdit()" [disabled]="isCompleteDisabled()">
         Conferma
       </app-button>
     </div>

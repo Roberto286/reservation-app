@@ -21,6 +21,18 @@ export class ReservationCard {
   openEditModal = signal(false);
   newSeats = signal(0);
   askForFetch = output<void>();
+  availableSeats = computed(() => {
+    const { maxParticipants, reservedSeats } = this.reservationData().eventDetail || {};
+    if (!maxParticipants || !reservedSeats) return 0;
+    return maxParticipants - reservedSeats;
+  });
+  isCompleteDisabled = computed(() => {
+    return (
+      this.newSeats() > this.maxAvailableSeats() ||
+      this.newSeats() <= 0 ||
+      this.maxAvailableSeats() === 0
+    );
+  });
 
   // Calcola i posti totali disponibili per questa prenotazione
   // (posti disponibili dell'evento + i posti già prenotati dall'utente)
@@ -70,15 +82,11 @@ export class ReservationCard {
 
   onSeatsChange(event: Event) {
     const value = parseInt((event.target as HTMLInputElement).value, 10);
-    if (!Number.isNaN(value) && value >= 1) {
-      this.newSeats.set(value);
-    } else if ((event.target as HTMLInputElement).value === '') {
-      this.newSeats.set(1);
-    }
+    this.newSeats.set(value);
   }
 
   onConfirmEdit() {
-    if (this.newSeats() > this.maxAvailableSeats()) {
+    if (this.newSeats() <= 0 || this.newSeats() > this.maxAvailableSeats()) {
       return;
     }
     this.openEditModal.set(false);
