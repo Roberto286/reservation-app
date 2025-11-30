@@ -91,9 +91,19 @@
     <!-- Actions -->
     <div class="card-actions justify-end mt-4">
       @if (reservationData().status !== 'CANCELLED') {
-      <button class="btn btn-error btn-sm">Cancella</button>
+      <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">Cancella</app-button>
       }
-      <button class="btn btn-primary btn-sm">Dettagli</button>
+      <app-button [size]="'sm'" [variant]="'accent'">Dettagli</app-button>
     </div>
   </div>
 </div>
+<app-modal [open]="openModal()">
+  <div class="flex flex-col gap-4">
+    <h2 class="modal-title">Conferma cancellazione</h2>
+    <p>Sei sicuro di voler cancellare questa prenotazione?</p>
+    <div class="modal-actions flex gap-2 justify-end">
+      <app-button [variant]="'accent'" (click)="openModal.set(false)">Annulla</app-button>
+      <app-button [variant]="'error'" (click)="onCancel()">Cancella</app-button>
+    </div>
+  </div>
+</app-modal>
