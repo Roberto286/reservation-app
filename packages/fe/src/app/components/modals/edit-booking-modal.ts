@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { AlertService } from '../../core/services/alert.service';
 import { ModalService } from '../../core/services/modal.service';
 import { Button } from '../button/button';
@@ -51,7 +51,9 @@ export interface EditBookingModalData {
 
       <div class="flex gap-2 justify-end mt-4">
         <app-button [variant]="'ghost'" (click)="onCancel()">Annulla</app-button>
-        <app-button [variant]="'primary'" (click)="onConfirm()">Conferma</app-button>
+        <app-button [disabled]="isCompleteDisabled()" [variant]="'primary'" (click)="onConfirm()"
+          >Conferma</app-button
+        >
       </div>
     </div>
   `,
@@ -60,6 +62,9 @@ export class EditBookingModal {
   private readonly http = inject(HttpClient);
   private readonly modalService = inject(ModalService);
   private readonly alertService = inject(AlertService);
+  isCompleteDisabled = computed(
+    () => this.newSeats() <= 0 || this.newSeats() > this.data().maxAvailableSeats
+  );
 
   data = input.required<EditBookingModalData>();
   newSeats = signal(0);
@@ -88,12 +93,7 @@ export class EditBookingModal {
 
   onSeatsChange(event: Event): void {
     const value = parseInt((event.target as HTMLInputElement).value, 10);
-    const max = this.data().maxAvailableSeats;
-    if (!Number.isNaN(value) && value >= 1) {
-      this.newSeats.set(Math.min(value, max));
-    } else if ((event.target as HTMLInputElement).value === '' || value <= 0) {
-      this.newSeats.set(1);
-    }
+    this.newSeats.set(Number.isNaN(value) ? 0 : value);
   }
 
   onCancel(): void {
@@ -101,8 +101,7 @@ export class EditBookingModal {
   }
 
   onConfirm(): void {
-    if (this.newSeats() <= 0 || this.newSeats() > this.data().maxAvailableSeats) {
-      this.alertService.error('Numero di posti non valido.');
+    if (this.isCompleteDisabled()) {
       return;
     }
 
