@@ -1,10 +1,10 @@
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { GetBookingDto } from '@reservation-app/shared';
-import { EventCard } from '../event-card/event-card';
 
 @Component({
   selector: 'app-reservation-card',
-  imports: [],
+  imports: [DatePipe, CommonModule],
   templateUrl: './reservation-card.html',
   styleUrl: './reservation-card.css',
 })
