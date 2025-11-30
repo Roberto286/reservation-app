@@ -19,7 +19,7 @@ export class Reservations {
     this.fetchReservations();
   }
 
-  private fetchReservations() {
+  fetchReservations() {
     this.http.get<GetBookingDto[]>(`/bookings/${this.userId}`).subscribe((data) => {
       this.reservations.set(data);
     });
