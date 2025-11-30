@@ -33,6 +33,14 @@ export class ReservationCard {
       this.maxAvailableSeats() === 0
     );
   });
+  unavailable = input(false);
+
+  // Verifica se l'evento è scaduto (data passata)
+  isEventExpired = computed(() => {
+    const eventDetail = this.reservationData().eventDetail;
+    if (!eventDetail) return false;
+    return new Date(eventDetail.startAt) < new Date();
+  });
 
   // Calcola i posti totali disponibili per questa prenotazione
   // (posti disponibili dell'evento + i posti già prenotati dall'utente)

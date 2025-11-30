@@ -8,7 +8,7 @@
   } @else {
 
   <!-- Prenotazioni attive -->
-  @if (activeReservations().length > 0) {
+  @if (activeReservations().length) {
   <div class="collapse collapse-arrow bg-base-200 mb-4">
     <input type="checkbox" checked />
     <div class="collapse-title text-xl font-semibold">
@@ -28,20 +28,21 @@
   </div>
   }
 
-  <!-- Prenotazioni passate -->
-  @if (pastReservations().length > 0) {
+  <!-- Prenotazioni non disponibili -->
+  @if (unavailableReservations().length) {
   <div class="collapse collapse-arrow bg-base-200">
     <input type="checkbox" />
     <div class="collapse-title text-xl font-semibold">
-      Prenotazioni passate ({{ pastReservations().length }})
+      Prenotazioni non disponibili ({{ unavailableReservations().length }})
     </div>
     <div class="collapse-content">
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 pt-4">
-        @for (reservation of pastReservations(); track reservation.id) {
+        @for (reservation of unavailableReservations(); track reservation.id) {
         <app-reservation-card
           [reservationData]="reservation"
           [isOutdated]="false"
           (askForFetch)="fetchReservations()"
+          [unavailable]="true"
         ></app-reservation-card>
         }
       </div>

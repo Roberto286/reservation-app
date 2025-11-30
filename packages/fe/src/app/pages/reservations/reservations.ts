@@ -23,10 +23,12 @@ export class Reservations {
     );
   });
 
-  protected pastReservations = computed(() => {
+  protected unavailableReservations = computed(() => {
     const now = new Date();
     return this.reservations().filter(
-      (reservation) => reservation.eventDetail && new Date(reservation.eventDetail.startAt) < now
+      (reservation) =>
+        (reservation.eventDetail && new Date(reservation.eventDetail.startAt) < now) ||
+        !reservation.eventId
     );
   });
   constructor() {

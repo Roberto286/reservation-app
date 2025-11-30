@@ -8,7 +8,16 @@
   </div>
   }
 
-  <div class="card-body" [class.pt-12]="!reservationData().eventDetail">
+  <!-- Banner per evento scaduto -->
+  @if (reservationData().eventId && isEventExpired()) {
+  <div
+    class="absolute top-0 left-0 right-0 bg-warning text-warning-content py-2 px-4 text-center font-bold text-sm z-10 rounded-t-xl"
+  >
+    EVENTO SCADUTO
+  </div>
+  }
+
+  <div class="card-body" [class.pt-12]="!reservationData().eventDetail || isEventExpired()">
     <!-- Event title -->
     @if (reservationData().eventDetail) {
     <h2 class="card-title">
@@ -114,15 +123,6 @@
       <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">Cancella</app-button>
       }
       <app-button [size]="'sm'" [variant]="'accent'" (click)="onEdit()">Modifica</app-button>
-    </div>
-    }
-
-    <!-- Azione per evento cancellato -->
-    @if (!reservationData().eventDetail) {
-    <div class="card-actions justify-end mt-4">
-      <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">
-        Elimina prenotazione
-      </app-button>
     </div>
     }
   </div>
