@@ -16,13 +16,18 @@
   }"
 >
   @for (event of events(); track event.id) {
-  <app-event-card [eventData]="event" (eventBooked)="onEventBooked()"></app-event-card>
+  <app-event-card
+    [eventData]="event"
+    (eventBooked)="onEventBooked()"
+    (isEditing)="onEditEvent($event)"
+  ></app-event-card>
   }
 </div>
 }
 <app-modal [open]="showModal()" [size]="'xl'" (closed)="showModal.set(false)">
   <div modal-header class="font-bold text-lg">Crea Nuovo Evento</div>
   <app-event-form
+    [eventData]="eventData()"
     [categories]="categories()"
     (onClose)="showModal.set(false)"
     (formSubmitted)="onNewEventCreated()"

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { EventCategory, GetEventsDto } from '@reservation-app/shared';
+import { EventCategory, GetEventDto, GetEventsDto } from '@reservation-app/shared';
 import { Button } from '../../components/button/button';
 import { EventCard } from '../../components/event-card/event-card';
 import { EventForm } from '../../components/event-form/event-form';
@@ -22,6 +22,7 @@ export class Dashboard {
   protected showModal = signal(false);
   protected categories = signal<EventCategory[]>([]);
   protected isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
+  protected readonly eventData = signal<GetEventDto | null>(null);
 
   constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
@@ -42,6 +43,7 @@ export class Dashboard {
   }
 
   onNewEvent() {
+    this.eventData.set(null);
     this.showModal.set(true);
   }
 
@@ -51,5 +53,10 @@ export class Dashboard {
 
   onEventBooked() {
     this.fetchEvents();
+  }
+
+  onEditEvent($event: GetEventDto) {
+    this.eventData.set($event);
+    this.showModal.set(true);
   }
 }

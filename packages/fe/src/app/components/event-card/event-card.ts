@@ -12,11 +12,12 @@ import type { GetEventDto } from '@reservation-app/shared';
 import { EVENT_CATEGORY_LABELS } from '@reservation-app/shared';
 import { AuthStateService } from '../../core/services/auth-state.service';
 import { BookingsService } from '../../core/services/bookings.service';
+import { Button } from '../button/button';
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Button],
   templateUrl: './event-card.html',
   styleUrl: './event-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +31,7 @@ export class EventCard {
   protected readonly bookingError = signal<string | null>(null);
   protected readonly selectedSeats = signal<number>(1);
   protected readonly isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
+  isEditing = output<GetEventDto>();
 
   protected readonly isUpcoming = computed(() => {
     const start = new Date(this.eventData().startAt).getTime();
@@ -100,5 +102,9 @@ export class EventCard {
   onSeatsChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedSeats.set(Number.parseInt(selectElement.value, 10));
+  }
+
+  onEditEvent() {
+    this.isEditing.emit(this.eventData());
   }
 }

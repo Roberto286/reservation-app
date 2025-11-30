@@ -66,6 +66,13 @@
         class="text-xs text-base-content/60"
         [textContent]="'Aggiornato: ' + eventDates().updatedAt"
       ></div>
+      @if (isAdmin) {
+      <div class="flex items-center gap-1.5">
+        <app-button [size]="'sm'" [variant]="'accent'" (click)="onEditEvent()">
+          Modifica Evento
+        </app-button>
+      </div>
+      } @else {
       <div class="flex items-center gap-1.5">
         <select
           class="select select-primary select-sm"
@@ -91,7 +98,7 @@
           Prenotazione... } @else { Prenota }
         </button>
       </div>
-      @if (bookingState() === 'success') {
+      } @if (bookingState() === 'success') {
       <p class="text-success text-xs" aria-live="polite">Prenotazione registrata!</p>
       } @else if (bookingState() === 'error' && bookingError()) {
       <p class="text-error text-xs" aria-live="assertive" [textContent]="bookingError()"></p>

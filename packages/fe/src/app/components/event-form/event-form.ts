@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
   output,
@@ -15,7 +16,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CreateEventDto, EVENT_CATEGORY_LABELS, EventCategory } from '@reservation-app/shared';
+import {
+  CreateEventDto,
+  EVENT_CATEGORY_LABELS,
+  EventCategory,
+  GetEventDto,
+} from '@reservation-app/shared';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
 import { SelectComponent, SelectOption } from '../select-component/select-component';
@@ -48,6 +54,7 @@ export class EventForm {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   readonly formSubmitted = output<void>();
+  eventData = input<GetEventDto | null>(null);
 
   startingDate() {
     const now = new Date();
@@ -70,6 +77,27 @@ export class EventForm {
       label: EVENT_CATEGORY_LABELS[category],
     }))
   );
+
+  constructor() {
+    effect(() => {
+      const event = this.eventData();
+      if (event) {
+        const startDate = new Date(event.startAt);
+        startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset());
+
+        this.form.patchValue({
+          title: event.title,
+          dateTime: startDate.toISOString().slice(0, 16),
+          category: event.category,
+          location: event.location,
+          maxParticipants: event.maxParticipants,
+          description: event.description || '',
+        });
+      } else {
+        this.form.reset();
+      }
+    });
+  }
 
   private mapFormToDto(formValue: EventFormRawValue): CreateEventDto {
     const start = new Date(formValue.dateTime);
