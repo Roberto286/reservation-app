@@ -1,1 +1,5 @@
-export type BookingStatusDto = "PENDING" | "CONFIRMED" | "CANCELLED";
+export type BookingStatusDto =
+  | "PENDING"
+  | "CONFIRMED"
+  | "CANCELLED"
+  | "OUTDATED";
