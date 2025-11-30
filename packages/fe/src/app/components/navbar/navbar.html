@@ -22,7 +22,7 @@
         tabindex="-1"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
       >
-        @for(route of navbarRoutes; track route.path){
+        @for(route of navbarRoutes(); track route.path){
         <li>
           <app-navlink [route]="route"></app-navlink>
         </li>
@@ -35,7 +35,7 @@
   <div class="navbar-center hidden lg:flex">
     @if(isLoggedIn()){
     <ul class="menu menu-horizontal px-1">
-      @for(route of navbarRoutes; track route.path){
+      @for(route of navbarRoutes(); track route.path){
       <li>
         <app-navlink [route]="route"></app-navlink>
       </li>

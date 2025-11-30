@@ -1,4 +1,4 @@
 export const NAVBAR_ROUTES = [
-  { path: '/dashboard', label: 'Dashboard' },
-  { path: '/reservations', label: 'Prenotazioni' },
+  { path: '/dashboard', label: 'Dashboard', roles: ['user', 'admin'] },
+  { path: '/reservations', label: 'Prenotazioni', roles: ['user'] },
 ];

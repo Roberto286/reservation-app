@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NAVBAR_ROUTES } from '../../constants';
 import { AuthStateService } from '../../core/services/auth-state.service';
@@ -13,8 +13,17 @@ import { ThemeSwitcher } from '../theme-switcher';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  protected readonly navbarRoutes = NAVBAR_ROUTES;
   private readonly authService = inject(AuthStateService);
 
   protected readonly isLoggedIn = this.authService.isAuthenticated;
+
+  protected readonly navbarRoutes = computed(() => {
+    const userRole = this.authService.getUserRole().toLowerCase();
+    return NAVBAR_ROUTES.filter((route) => {
+      if (!route.roles.includes(userRole)) {
+        return false;
+      }
+      return true;
+    });
+  });
 }
