@@ -1,10 +1,18 @@
 services:
-  cloudflared:
+  cloudflared-fe:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+      - TUNNEL_TOKEN_FE=${TUNNEL_TOKEN}
+    networks:
+      - app-network
+  cloudflared-be:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN_BE=${TUNNEL_TOKEN}
     networks:
       - app-network
 
