@@ -9,14 +9,14 @@ const ACCESS_TOKEN_COOKIE = 'access_token';
 export class AuthStateService {
   private readonly cookieService = inject(CookieService);
   private readonly authenticated = signal(this.cookieService.check(ACCESS_TOKEN_COOKIE));
-  private readonly userRole = signal<UserRole>(UserRole.User);
+  private readonly _userRole = signal<UserRole>(UserRole.User);
 
   readonly isAuthenticated = computed(() => this.authenticated());
 
   login(res: LoginOkDto) {
     this.persistAccessToken(res.access_token);
     this.persistUserId(res.userId);
-    this.userRole.set(res.userRole);
+    this.userRole = res.userRole;
   }
 
   private persistAccessToken(token: string) {
@@ -45,5 +45,13 @@ export class AuthStateService {
   getUserId(): string | null {
     const userId = this.cookieService.get('user_id');
     return userId ? userId : null;
+  }
+
+  get userRole(): UserRole {
+    return this._userRole();
+  }
+
+  private set userRole(value: UserRole) {
+    this._userRole.set(value);
   }
 }
