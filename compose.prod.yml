@@ -8,6 +8,22 @@ services:
     networks:
       - app-network
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: reservation-app
+    restart: unless-stopped
+    ports:
+      - "3008:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
   mongodb:
     image: mongo:7.0
     container_name: mongodb
@@ -22,31 +38,9 @@ services:
     networks:
       - app-network
 
-  backend:
-    image: node:24-alpine
-    container_name: be
-    working_dir: /app
-    volumes:
-      - ./packages/be:/app
-      - ./packages/fe/dist:/app/fe/dist
-      - ./packages/shared:/shared
-      - be_node_modules:/app/node_modules
-      - be_pnpm_store:/root/.local/share/pnpm/store
-    ports:
-      - "3008:3000"
-    command: sh -c "corepack enable && pnpm --dir /shared install && pnpm --dir /shared run build && pnpm --dir ../fe install && pnpm --dir ../fe run build:prod && pnpm i && pnpm run build && pnpm run start:prod"
-    environment:
-      - NODE_ENV=production
-      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
-      - NODE_PATH=/app/node_modules
-    networks:
-      - app-network
-
 networks:
   app-network:
     driver: bridge
 
 volumes:
   mongodb_data:
-  be_node_modules:
-  be_pnpm_store:

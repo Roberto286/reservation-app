@@ -1,7 +1,8 @@
+import { join } from "node:path";
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { join } from "path";
+import type { NextFunction, Request, Response } from "express";
 import { AppModule } from "./app.module";
 
 const PORT = process.env.PORT ?? 3000;
@@ -24,7 +25,7 @@ async function bootstrap() {
     app.useStaticAssets(join(__dirname, "../../fe/dist/fe/browser"));
     app.setBaseViewsDir(join(__dirname, "../../fe/dist/fe/browser"));
     // Fallback to index.html for SPA routing
-    app.use((req, res, next) => {
+    app.use((req: Request, res: Response, next: NextFunction) => {
       if (!req.path.startsWith("/api")) {
         res.sendFile(join(__dirname, "../../fe/dist/fe/browser/index.html"));
       } else {
