@@ -7,6 +7,7 @@ import { EventCard } from '../../components/event-card/event-card';
 import { EventForm } from '../../components/event-form/event-form';
 import { EventsMenu } from '../../components/events-menu';
 import { Modal } from '../../components/modal/modal';
+import { AuthStateService } from '../../core/services/auth-state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,9 +17,11 @@ import { Modal } from '../../components/modal/modal';
 })
 export class Dashboard {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthStateService);
   events = signal<GetEventsDto>([]);
   showModal = signal(false);
   categories = signal<EventCategory[]>([]);
+  isAdmin = this.authService.userRole.toLowerCase() === 'admin';
 
   constructor() {
     this.http.get<EventCategory[]>('/events/categories').subscribe((categories) => {
