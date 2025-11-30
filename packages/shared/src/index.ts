@@ -1,3 +1,6 @@
+import "reflect-metadata";
+
+export * from "./constant";
 export * from "./dto/auth/login-ok.dto";
 export * from "./dto/auth/signup-request.dto";
 export * from "./dto/bookings/booking-status";
