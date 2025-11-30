@@ -1,13 +1,16 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
   CreateEventDto,
   EventCategory,
   GetEventDto,
-  type GetEventsDto,
+  GetEventsDto,
   UpdateEventDto,
 } from "@reservation-app/shared";
-import console from "console";
 import type { Model } from "mongoose";
 import type { EventDocument } from "src/schemas/event.schema";
 import { Event } from "src/schemas/event.schema";
@@ -76,6 +79,16 @@ export class EventsService {
 
     if (!event) {
       throw new NotFoundException(`Event with id ${id} not found`);
+    }
+
+    // Valida che maxParticipants non sia minore dei posti già prenotati
+    if (
+      body.maxParticipants !== undefined &&
+      body.maxParticipants < event.reservedSeats
+    ) {
+      throw new BadRequestException(
+        `Il numero massimo di partecipanti (${body.maxParticipants}) non può essere inferiore ai posti già prenotati (${event.reservedSeats})`
+      );
     }
 
     Object.assign(event, body);
