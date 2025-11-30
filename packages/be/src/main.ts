@@ -22,12 +22,12 @@ async function bootstrap() {
 
   // Serve static files from Angular build
   if (process.env.NODE_ENV === "production") {
-    app.useStaticAssets(join(__dirname, "../../fe/dist/fe/browser"));
-    app.setBaseViewsDir(join(__dirname, "../../fe/dist/fe/browser"));
+    app.useStaticAssets(join(__dirname, "../fe/dist/fe/browser"));
+    app.setBaseViewsDir(join(__dirname, "../fe/dist/fe/browser"));
     // Fallback to index.html for SPA routing
     app.use((req: Request, res: Response, next: NextFunction) => {
       if (!req.path.startsWith("/api")) {
-        res.sendFile(join(__dirname, "../../fe/dist/fe/browser/index.html"));
+        res.sendFile(join(__dirname, "../fe/dist/fe/browser/index.html"));
       } else {
         next();
       }
