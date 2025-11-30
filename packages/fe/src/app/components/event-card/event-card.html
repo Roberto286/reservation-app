@@ -19,10 +19,28 @@
     </div>
 
     @if (eventData().description?.trim()?.length) {
-    <p
-      class="text-xs leading-relaxed text-base-content/80 text-ellipsis"
-      [textContent]="eventData().description"
-    ></p>
+    <div class="flex items-start gap-2">
+      <p class="text-xs leading-relaxed text-base-content/80 flex-1" [textContent]="truncatedDescription()"></p>
+      @if (eventData().description && eventData().description!.length > 150) {
+      <div class="tooltip tooltip-left" [attr.data-tip]="eventData().description">
+        <button type="button" class="btn btn-circle btn-ghost btn-xs text-info">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="h-4 w-4 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      }
+    </div>
     }
 
     <div class="grid gap-1.5 text-xs">

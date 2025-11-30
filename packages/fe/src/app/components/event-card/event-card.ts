@@ -87,6 +87,15 @@ export class EventCard {
     return EVENT_CATEGORY_LABELS[this.eventData().category];
   });
 
+  protected readonly truncatedDescription = computed(() => {
+    const description = this.eventData().description?.trim();
+    if (!description) return '';
+    const maxLength = 150;
+    return description.length > maxLength
+      ? description.substring(0, maxLength) + '...'
+      : description;
+  });
+
   protected readonly placeholderImage = 'https://placehold.co/384x192/png';
 
   protected readonly canBook = computed(
