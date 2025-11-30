@@ -13,12 +13,15 @@ import {
   EventCategory,
   GetEventsDto,
   UpdateEventDto,
+  UserRole,
 } from "@reservation-app/shared";
 import { AuthGuard } from "src/auth/auth.guard";
+import { Roles } from "src/auth/roles.decorator";
+import { RolesGuard } from "src/auth/roles.guard";
 import { EventsService } from "./events.service";
 
 @Controller("events")
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
@@ -28,6 +31,7 @@ export class EventsController {
   }
 
   @Post("")
+  @Roles(UserRole.Admin)
   createEvent(@Body() body: CreateEventDto) {
     this.eventsService.createEvent(body);
   }
@@ -45,11 +49,13 @@ export class EventsController {
   }
 
   @Put("/:id")
+  @Roles(UserRole.Admin)
   updateEvent(@Param("id") id: string, @Body() body: UpdateEventDto) {
     return this.eventsService.updateEvent(id, body);
   }
 
   @Delete("/:id")
+  @Roles(UserRole.Admin)
   deleteEvent(@Param("id") id: string) {
     return this.eventsService.deleteEvent(id);
   }

@@ -20,7 +20,10 @@
 
     @if (eventData().description?.trim()?.length) {
     <div class="flex items-start gap-2">
-      <p class="text-xs leading-relaxed text-base-content/80 flex-1" [textContent]="truncatedDescription()"></p>
+      <p
+        class="text-xs leading-relaxed text-base-content/80 flex-1"
+        [textContent]="truncatedDescription()"
+      ></p>
       @if (eventData().description && eventData().description!.length > 150) {
       <div class="tooltip tooltip-left" [attr.data-tip]="eventData().description">
         <button type="button" class="btn btn-circle btn-ghost btn-xs text-info">

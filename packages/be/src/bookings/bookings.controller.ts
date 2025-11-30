@@ -18,13 +18,16 @@ import {
   EventBookingsResponseDto,
   GetBookingDto,
   UpdateBookingDto,
+  UserRole,
 } from "@reservation-app/shared";
 import { AuthGuard } from "src/auth/auth.guard";
+import { Roles } from "src/auth/roles.decorator";
+import { RolesGuard } from "src/auth/roles.guard";
 import type { AuthenticatedRequest } from "src/common/interfaces/authenticated-request";
 import { BookingsService } from "./bookings.service";
 
 @Controller("bookings")
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
@@ -44,6 +47,7 @@ export class BookingsController {
   }
 
   @Get()
+  @Roles(UserRole.Admin)
   getEventBookings(
     @Param("eventId") eventId: string,
     @Query() query: EventBookingsQueryDto
