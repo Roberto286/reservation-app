@@ -1,10 +1,21 @@
-<div class="card bg-base-100 shadow-xl">
-  <div class="card-body">
+<div class="card bg-base-100 shadow-xl relative">
+  <!-- Banner per evento cancellato -->
+  @if (!reservationData().eventId) {
+  <div
+    class="absolute top-0 left-0 right-0 bg-error text-error-content py-2 px-4 text-center font-bold text-sm z-10 rounded-t-xl"
+  >
+    EVENTO CANCELLATO
+  </div>
+  }
+
+  <div class="card-body" [class.pt-12]="!reservationData().eventDetail">
     <!-- Event title -->
     @if (reservationData().eventDetail) {
     <h2 class="card-title">
       {{ reservationData().eventDetail!.title }}
     </h2>
+    } @else {
+    <h2 class="card-title text-base-content/50">Evento non più disponibile</h2>
     }
 
     <!-- Event details -->
@@ -93,12 +104,21 @@
     </div>
 
     <!-- Actions -->
-    @if (isOutdated()) {
+    @if (isOutdated() && reservationData().eventDetail) {
     <div class="card-actions justify-end mt-4">
       @if (reservationData().status !== 'CANCELLED') {
       <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">Cancella</app-button>
       }
       <app-button [size]="'sm'" [variant]="'accent'" (click)="onEdit()">Modifica</app-button>
+    </div>
+    }
+
+    <!-- Azione per evento cancellato -->
+    @if (!reservationData().eventDetail) {
+    <div class="card-actions justify-end mt-4">
+      <app-button [size]="'sm'" [variant]="'error'" (click)="onCancel()">
+        Elimina prenotazione
+      </app-button>
     </div>
     }
   </div>
