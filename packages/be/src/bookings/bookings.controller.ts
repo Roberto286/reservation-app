@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -83,5 +84,19 @@ export class BookingsController {
     @Param("attendeeId") attendeeId: string
   ): Promise<GetBookingDto[]> {
     return this.bookingsService.getBookingsByAttendee(attendeeId);
+  }
+
+  @Delete(":bookingId")
+  deleteBooking(
+    @Param("bookingId") bookingId: string,
+    @Req() request: AuthenticatedRequest
+  ): Promise<{ deletedCount?: number }> {
+    const userId = request.user?.sub ?? ""; // è safe dato che c'è l'AuthGuard
+
+    if (!userId) {
+      throw new UnauthorizedException("Token non valido");
+    }
+
+    return this.bookingsService.deleteBooking(bookingId, userId);
   }
 }

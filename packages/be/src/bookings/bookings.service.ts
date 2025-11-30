@@ -320,4 +320,19 @@ export class BookingsService {
 
     return bookings.map((booking) => this.mapBookingToDto(booking));
   }
+
+  async deleteBooking(
+    bookingId: string,
+    userId: string
+  ): Promise<{ deletedCount?: number }> {
+    const booking = await this.bookingModel.findById(bookingId).exec();
+    if (!booking) {
+      throw new NotFoundException("Prenotazione non trovata");
+    }
+
+    this.ensureOwnership(booking, userId);
+
+    const result = await this.bookingModel.deleteOne({ _id: bookingId }).exec();
+    return { deletedCount: result.deletedCount };
+  }
 }
