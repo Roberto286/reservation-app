@@ -8,6 +8,7 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import {
   type CreateBookingDto,
+  DeleteBookingDto,
   EventBookingsQueryDto,
   EventBookingsResponseDto,
   GetBookingDto,
@@ -155,7 +156,7 @@ export class BookingsService {
   async cancelBooking(
     bookingId: string,
     requesterId: string
-  ): Promise<GetBookingDto> {
+  ): Promise<DeleteBookingDto> {
     const booking = await this.bookingModel.findById(bookingId).exec();
     if (!booking) {
       throw new NotFoundException("Prenotazione non trovata");
@@ -167,15 +168,12 @@ export class BookingsService {
       throw new ConflictException("La prenotazione è già cancellata");
     }
 
-    booking.status = BookingStatus.Cancelled;
-    booking.cancelledAt = new Date();
-
     await this.adjustReservedSeats(booking.eventId, -booking.seats);
 
-    const saved = await booking.save();
-    await saved.populate("attendeeId", ["email", "displayName"]);
-    await saved.populate("eventId", ["title", "location", "startAt"]);
-    return this.mapBookingToDto(saved);
+    // Elimina il record dal database
+    await this.bookingModel.deleteOne({ _id: bookingId }).exec();
+
+    return { id: bookingId, deletedCount: 1 };
   }
 
   private async incrementReservedSeats(
@@ -265,8 +263,16 @@ export class BookingsService {
     dto.updatedAt = booking.updatedAt?.toISOString();
     dto.cancelledAt = booking.cancelledAt?.toISOString();
 
-    const event = booking.eventId as unknown as EventDocument | Types.ObjectId;
-    if (event instanceof Types.ObjectId) {
+    const event = booking.eventId as unknown as
+      | EventDocument
+      | Types.ObjectId
+      | null;
+
+    // Gestisci evento eliminato
+    if (!event) {
+      dto.eventId = null;
+      dto.eventDetail = null;
+    } else if (event instanceof Types.ObjectId) {
       dto.eventId = event.toString();
     } else {
       dto.eventId = event._id.toString();
@@ -319,20 +325,5 @@ export class BookingsService {
       .exec();
 
     return bookings.map((booking) => this.mapBookingToDto(booking));
-  }
-
-  async deleteBooking(
-    bookingId: string,
-    userId: string
-  ): Promise<{ deletedCount?: number }> {
-    const booking = await this.bookingModel.findById(bookingId).exec();
-    if (!booking) {
-      throw new NotFoundException("Prenotazione non trovata");
-    }
-
-    this.ensureOwnership(booking, userId);
-
-    const result = await this.bookingModel.deleteOne({ _id: bookingId }).exec();
-    return { deletedCount: result.deletedCount };
   }
 }

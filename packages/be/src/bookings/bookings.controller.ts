@@ -13,6 +13,7 @@ import {
 } from "@nestjs/common";
 import {
   CreateBookingDto,
+  DeleteBookingDto,
   EventBookingsQueryDto,
   EventBookingsResponseDto,
   GetBookingDto,
@@ -40,20 +41,6 @@ export class BookingsController {
     }
 
     return this.bookingsService.updateBooking(bookingId, body, userId);
-  }
-
-  @Post(":bookingId/cancel")
-  cancelBooking(
-    @Param("bookingId") bookingId: string,
-    @Req() request: AuthenticatedRequest
-  ): Promise<GetBookingDto> {
-    const userId = request.user?.sub ?? ""; // è safe dato che c'è l'AuthGuard
-
-    if (!userId) {
-      throw new UnauthorizedException("Token non valido");
-    }
-
-    return this.bookingsService.cancelBooking(bookingId, userId);
   }
 
   @Get()
@@ -90,13 +77,13 @@ export class BookingsController {
   deleteBooking(
     @Param("bookingId") bookingId: string,
     @Req() request: AuthenticatedRequest
-  ): Promise<{ deletedCount?: number }> {
+  ): Promise<DeleteBookingDto> {
     const userId = request.user?.sub ?? ""; // è safe dato che c'è l'AuthGuard
 
     if (!userId) {
       throw new UnauthorizedException("Token non valido");
     }
 
-    return this.bookingsService.deleteBooking(bookingId, userId);
+    return this.bookingsService.cancelBooking(bookingId, userId);
   }
 }
