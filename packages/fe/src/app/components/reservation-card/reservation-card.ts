@@ -12,9 +12,13 @@ import { Modal } from '../modal/modal';
 })
 export class ReservationCard {
   reservationData = input.required<GetBookingDto>();
-  openModal = signal(false);
+  openConfirmCancelationModal = signal(false);
 
   onCancel() {
-    this.openModal.set(true);
+    this.openConfirmCancelationModal.set(true);
+  }
+
+  onConfirmCancel() {
+    throw new Error('Method not implemented.');
   }
 }
