@@ -18,6 +18,11 @@ export class ReservationCard {
   isOutdated = input<boolean>(true);
   askForFetch = output<void>();
   unavailable = input(false);
+  availableSeats = computed(() => {
+    const eventDetail = this.reservationData().eventDetail;
+    if (!eventDetail) return 0;
+    return eventDetail.maxParticipants - eventDetail.reservedSeats;
+  });
 
   // Verifica se l'evento è scaduto (data passata)
   isEventExpired = computed(() => {
