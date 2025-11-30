@@ -54,6 +54,7 @@ export class EventsService {
     dto.category = event.category;
     dto.tags = event.tags ?? [];
     dto.updatedAt = event.updatedAt.toISOString();
+    dto.organizerEmail = event.organizerEmail;
     return dto;
   }
 

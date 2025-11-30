@@ -97,7 +97,12 @@ export class EventCard {
       : description;
   });
 
-  protected readonly placeholderImage = 'https://picsum.photos/300/200';
+  protected readonly placeholderImage = computed(() => {
+    // Usa l'ID dell'evento per generare un seed numerico consistente
+    const id = this.eventData().id;
+    const seed = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return `https://picsum.photos/seed/${seed}/300/200`;
+  });
 
   protected readonly canBook = computed(
     () =>
