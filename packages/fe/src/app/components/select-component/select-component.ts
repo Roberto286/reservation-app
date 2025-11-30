@@ -2,7 +2,7 @@ import { booleanAttribute, Component, forwardRef, input, signal } from '@angular
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export type SelectOption = {
-  value: string;
+  value: string | null;
   label: string;
   disabled?: boolean;
 };

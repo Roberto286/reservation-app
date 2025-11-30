@@ -77,12 +77,13 @@ export class EventForm {
     description: [''],
   });
 
-  protected readonly categoriesOptions: Signal<SelectOption[]> = computed(() =>
-    this.categories().map((category) => ({
+  protected readonly categoriesOptions: Signal<SelectOption[]> = computed(() => [
+    { value: null, label: 'Seleziona una categoria', disabled: true },
+    ...this.categories().map((category) => ({
       value: category,
       label: EVENT_CATEGORY_LABELS[category],
-    }))
-  );
+    })),
+  ]);
 
   constructor() {
     effect(() => {
