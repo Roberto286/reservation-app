@@ -4,29 +4,31 @@
 ></app-events-menu>
 
 <!-- Sezione Filtri -->
-<div class="bg-base-200 mt-6 mb-4 flex flex-row w-full p-8 rounded-2xl items-center">
-  <h3 class="text-lg mb-4 flex-1">Filtri</h3>
-  <div class="flex gap-10">
+<div
+  class="bg-base-200 mt-6 mb-4 flex flex-col w-full max-w-full p-3 sm:p-6 rounded-2xl gap-3 sm:gap-4 overflow-hidden"
+>
+  <h3 class="text-lg font-semibold">Filtri</h3>
+  <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
     <!-- Filtro Data -->
-    <label class="form-control flex flex-col">
+    <label class="form-control flex flex-col flex-1 min-w-0">
       <div class="label">
         <span class="label-text">Data evento</span>
       </div>
       <input
         type="date"
-        class="input input-md"
+        class="input input-md w-full"
         [value]="dateFilter()"
         (input)="onDateFilterChange($event)"
       />
     </label>
 
     <!-- Filtro Disponibilità -->
-    <label class="form-control flex flex-col">
+    <label class="form-control flex flex-col flex-1 min-w-0">
       <div class="label">
         <span class="label-text">Disponibilità posti</span>
       </div>
       <select
-        class="select select-md"
+        class="select select-md w-full"
         [value]="availabilityFilter()"
         (change)="onAvailabilityFilterChange($event)"
       >
@@ -37,11 +39,15 @@
     </label>
 
     <!-- Ordinamento -->
-    <label class="form-control flex flex-col">
+    <label class="form-control flex flex-col flex-1 min-w-0">
       <div class="label">
         <span class="label-text">Ordina per</span>
       </div>
-      <select class="select select-md" [value]="sortOrder()" (change)="onSortOrderChange($event)">
+      <select
+        class="select select-md w-full"
+        [value]="sortOrder()"
+        (change)="onSortOrderChange($event)"
+      >
         <option value="date-asc">Data (più vicini)</option>
         <option value="date-desc">Data (più lontani)</option>
         <option value="availability">Disponibilità</option>
@@ -50,7 +56,7 @@
   </div>
 
   <!-- Pulsante Reset Filtri -->
-  <div class="flex items-end">
+  <div class="flex justify-end">
     <app-button [variant]="'ghost'" [size]="'sm'" (click)="clearFilters()">
       Cancella filtri
     </app-button>
