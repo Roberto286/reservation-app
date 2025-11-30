@@ -8,6 +8,7 @@ import {
   input,
   output,
   Signal,
+  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -24,6 +25,7 @@ import {
 } from '@reservation-app/shared';
 import { Button } from '../button/button';
 import { InputComponent } from '../input-component/input-component';
+import { Modal } from '../modal/modal';
 import { SelectComponent, SelectOption } from '../select-component/select-component';
 import { TextareaComponent } from '../textarea-component/textarea-component';
 
@@ -43,7 +45,7 @@ type EventFormRawValue = {
 @Component({
   selector: 'app-event-form',
   standalone: true,
-  imports: [ReactiveFormsModule, Button, InputComponent, SelectComponent, TextareaComponent],
+  imports: [ReactiveFormsModule, Button, InputComponent, SelectComponent, TextareaComponent, Modal],
   templateUrl: './event-form.html',
   styleUrl: './event-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,6 +58,7 @@ export class EventForm {
   readonly formSubmitted = output<void>();
   eventData = input<GetEventDto | null>(null);
   isEditMode: Signal<boolean> = computed(() => this.eventData() !== null);
+  protected openConfirmDeleteModal = signal(false);
 
   startingDate() {
     const now = new Date();
@@ -161,6 +164,31 @@ export class EventForm {
       error: () => {
         console.error(
           "Si è verificato un errore durante la creazione dell'evento. Per favore riprova."
+        );
+      },
+    });
+  }
+
+  onDeleteEvent() {
+    this.openConfirmDeleteModal.set(true);
+  }
+
+  onConfirmDelete() {
+    const eventId = this.eventData()?.id;
+    if (!eventId) {
+      console.error('Event ID is missing for delete operation.');
+      return;
+    }
+
+    this.http.delete(`/events/${eventId}`).subscribe({
+      next: () => {
+        this.openConfirmDeleteModal.set(false);
+        this.onClose.emit();
+        this.formSubmitted.emit();
+      },
+      error: () => {
+        console.error(
+          "Si è verificato un errore durante l'eliminazione dell'evento. Per favore riprova."
         );
       },
     });
