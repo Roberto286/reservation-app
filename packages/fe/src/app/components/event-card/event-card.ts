@@ -97,7 +97,7 @@ export class EventCard {
       : description;
   });
 
-  protected readonly placeholderImage = 'https://placehold.co/384x192/png';
+  protected readonly placeholderImage = 'https://picsum.photos/300/200';
 
   protected readonly canBook = computed(
     () =>
