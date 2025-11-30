@@ -14,8 +14,8 @@ export class BookingEventDetailDto {
 
 export class GetBookingDto {
   id!: string;
-  eventId!: string;
-  eventDetail?: BookingEventDetailDto;
+  eventId!: string | null;
+  eventDetail?: BookingEventDetailDto | null;
   attendee!: BookingAttendeeDto;
   seats!: number;
   status!: BookingStatusDto;

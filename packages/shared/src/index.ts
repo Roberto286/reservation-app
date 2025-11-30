@@ -2,6 +2,7 @@ export * from "./dto/auth/login-ok.dto";
 export * from "./dto/auth/signup-request.dto";
 export * from "./dto/bookings/booking-status";
 export * from "./dto/bookings/create-booking.dto";
+export * from "./dto/bookings/delete-booking.dto";
 export * from "./dto/bookings/get-bookings.dto";
 export * from "./dto/bookings/update-booking.dto";
 export * from "./dto/events/create-event.dto";
