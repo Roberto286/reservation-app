@@ -43,15 +43,16 @@ WORKDIR /app
 
 # Copy backend source files needed for production install
 COPY --from=be-builder /build/pnpm-workspace.yaml ./
-COPY --from=be-builder /build/package.json ./root-package.json
+COPY --from=be-builder /build/package.json ./package.json
 COPY --from=be-builder /build/pnpm-lock.yaml ./
 COPY --from=be-builder /build/packages/be/package.json ./packages/be/package.json
 
-# Copy shared package for linking
-COPY --from=shared-builder /build/packages/shared ./packages/shared
+# Copy already-built shared package (dist + package.json only, no source to avoid prepare script)
+COPY --from=shared-builder /build/packages/shared/dist ./packages/shared/dist
+COPY --from=shared-builder /build/packages/shared/package.json ./packages/shared/package.json
 
-# Install production dependencies only
-RUN pnpm install --filter be --prod --frozen-lockfile
+# Install production dependencies only (ignore scripts to avoid running prepare)
+RUN pnpm install --filter be --prod --frozen-lockfile --ignore-scripts
 
 # Copy built artifacts
 COPY --from=be-builder /build/packages/be/dist ./packages/be/dist
