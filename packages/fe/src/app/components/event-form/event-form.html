@@ -48,10 +48,10 @@
   </div>
 
   <div class="flex justify-end space-x-4">
+    <app-button type="button" variant="secondary" (click)="onClose.emit()">Annulla</app-button>
     @if(isEditMode()){
     <app-button type="button" [variant]="'error'" (click)="onDeleteEvent()">Elimina</app-button>
     }
-    <app-button type="button" variant="secondary" (click)="onClose.emit()">Annulla</app-button>
     <app-button type="submit" [disabled]="form.invalid">Salva</app-button>
   </div>
 </form>
