@@ -37,6 +37,7 @@ export class ReservationCard {
         },
       });
   }
+
   onEdit() {
     this.newSeats.set(this.reservationData().seats);
     this.openEditModal.set(true);
@@ -62,7 +63,16 @@ export class ReservationCard {
   }
 
   onConfirmEdit() {
-    console.log('Nuovi posti:', this.newSeats());
     this.openEditModal.set(false);
+    this.http
+      .patch(`/bookings/${this.reservationData().id}`, { seats: this.newSeats() })
+      .subscribe({
+        next: () => {
+          this.askForFetch.emit();
+        },
+        error: (error) => {
+          console.error('Errore durante la modifica della prenotazione:', error);
+        },
+      });
   }
 }
