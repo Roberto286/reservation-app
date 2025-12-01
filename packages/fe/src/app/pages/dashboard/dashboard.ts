@@ -135,7 +135,8 @@ export class Dashboard {
     this.fetchEvents();
     // Ricarica le userBookings dopo una prenotazione
     if (!this.isAdmin) {
-      this.http.get<GetBookingDto[]>('/bookings/user').subscribe((bookings) => {
+      const userId = this.authService.getUserId();
+      this.http.get<GetBookingDto[]>(`/bookings/${userId}`).subscribe((bookings) => {
         this.userBookings.set(bookings);
       });
     }
