@@ -42,7 +42,9 @@ export class EventCard {
   unavailable = input<boolean>(false);
 
   protected readonly hasAlreadyBooked = computed(() => {
-    return this.bookingsService.hasUserBookedEvent(this.eventData().id, this.userBookings());
+    const bookings = this.userBookings();
+    if (bookings.length === 0) return false;
+    return this.bookingsService.hasUserBookedEvent(this.eventData().id, bookings);
   });
 
   protected readonly isUpcoming = computed(() => {
@@ -99,7 +101,8 @@ export class EventCard {
 
   protected readonly seatsOptions = computed(() => {
     const available = this.availableSeats();
-    return Array.from({ length: available }, (_, i) => i + 1);
+    const maxOptions = Math.min(available, 10); // Limite a 10 posti per performance
+    return Array.from({ length: maxOptions }, (_, i) => i + 1);
   });
 
   bookSeats() {
