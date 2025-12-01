@@ -1,0 +1,42 @@
+@if(totalPages() > 1) {
+<div class="flex justify-center my-6">
+  <div class="join">
+    <app-button
+      class="join-item"
+      size="sm"
+      variant="ghost"
+      [disabled]="currentPage() === 1"
+      (click)="previousPage()"
+      aria-label="Previous page"
+    >
+      «
+    </app-button>
+
+    @for(page of pages(); track page; let i = $index) { @if(shouldShowEllipsis(page, i)) {
+    <app-button class="join-item" size="sm" variant="ghost" [disabled]="true">...</app-button>
+    }
+    <app-button
+      class="join-item"
+      size="sm"
+      [variant]="page === currentPage() ? 'primary' : 'ghost'"
+      (click)="goToPage(page)"
+      [attr.aria-label]="'Go to page ' + page"
+      [attr.aria-current]="page === currentPage() ? 'page' : null"
+    >
+      {{ page }}
+    </app-button>
+    }
+
+    <app-button
+      class="join-item"
+      size="sm"
+      variant="ghost"
+      [disabled]="currentPage() === totalPages()"
+      (click)="nextPage()"
+      aria-label="Next page"
+    >
+      »
+    </app-button>
+  </div>
+</div>
+}

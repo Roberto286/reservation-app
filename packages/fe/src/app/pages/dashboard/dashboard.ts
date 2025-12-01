@@ -8,13 +8,14 @@ import { EventCard } from '../../components/event-card/event-card';
 import { EventForm } from '../../components/event-form/event-form';
 import { EventsMenu } from '../../components/events-menu';
 import { Modal } from '../../components/modal/modal';
+import { Paginator } from '../../components/paginator/paginator';
 import { AuthStateService } from '../../core/services/auth-state.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
   styles: [],
-  imports: [EventsMenu, Button, Modal, EventForm, CommonModule, EventCard, FormsModule],
+  imports: [EventsMenu, Button, Modal, EventForm, CommonModule, EventCard, FormsModule, Paginator],
 })
 export class Dashboard {
   private readonly http = inject(HttpClient);
@@ -29,6 +30,10 @@ export class Dashboard {
   protected dateFilter = signal<string>('');
   protected availabilityFilter = signal<string>('all');
   protected sortOrder = signal<string>('date-asc');
+
+  // Pagination
+  protected currentPage = signal<number>(1);
+  protected itemsPerPage = signal<number>(8);
 
   protected filteredEvents = computed(() => {
     let result = [...this.events()];
@@ -66,6 +71,17 @@ export class Dashboard {
 
     return result;
   });
+
+  protected paginatedEvents = computed(() => {
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    const end = start + this.itemsPerPage();
+    return this.filteredEvents().slice(start, end);
+  });
+
+  protected totalPages = computed(() => {
+    return Math.ceil(this.filteredEvents().length / this.itemsPerPage());
+  });
+
   unavailableEvents = signal<GetEventsDto>([]);
 
   constructor() {
@@ -132,5 +148,13 @@ export class Dashboard {
     this.dateFilter.set('');
     this.availabilityFilter.set('all');
     this.sortOrder.set('date-asc');
+    this.currentPage.set(1);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 }

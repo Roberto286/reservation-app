@@ -67,16 +67,16 @@
   <h2 class="text-2xl font-bold">Eventi Disponibili ({{ filteredEvents().length }})</h2>
   @if(isAdmin){<app-button (click)="onNewEvent()">Nuovo Evento</app-button>}
 </div>
-@if(filteredEvents().length) {
+@if(paginatedEvents().length) {
 <div
   class="grid gap-6 my-6"
   [ngClass]="{
-    'grid-cols-1': filteredEvents().length === 1,
-    'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2': filteredEvents().length === 2,
-    'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4': filteredEvents().length >= 3
+    'grid-cols-1': paginatedEvents().length === 1,
+    'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2': paginatedEvents().length === 2,
+    'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4': paginatedEvents().length >= 3
   }"
 >
-  @for (event of filteredEvents(); track event.id) {
+  @for (event of paginatedEvents(); track event.id) {
   <app-event-card
     [eventData]="event"
     (eventBooked)="onEventBooked()"
@@ -84,6 +84,14 @@
   ></app-event-card>
   }
 </div>
+
+<!-- Pagination Controls -->
+<app-paginator
+  [currentPage]="currentPage()"
+  [totalPages]="totalPages()"
+  (pageChange)="goToPage($event)"
+></app-paginator>
+
 } @else {
 <div class="alert alert-info my-6">
   <svg
