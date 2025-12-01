@@ -116,12 +116,6 @@ export class EventCard {
     this.bookingsService.bookSeats(this.eventData().id, this.selectedSeats(), {
       onStateChange: (state) => {
         this.bookingState.set(state);
-        if (state === 'success') {
-          // Ricarica le prenotazioni dopo una prenotazione riuscita
-          this.bookingsService.getUserBookings().subscribe((bookings) => {
-            this.userBookings.set(bookings);
-          });
-        }
         this.eventBooked.emit();
       },
       onErrorMessage: (message) => this.bookingError.set(message),
