@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EventCategory, GetEventDto, GetEventsDto } from '@reservation-app/shared';
+import { EventCategory, GetBookingDto, GetEventDto, GetEventsDto } from '@reservation-app/shared';
 import { Button } from '../../components/button/button';
 import { EventCard } from '../../components/event-card/event-card';
 import { EventForm } from '../../components/event-form/event-form';
@@ -26,6 +26,7 @@ export class Dashboard {
   protected isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
   protected readonly eventData = signal<GetEventDto | null>(null);
   protected isEditing = computed(() => this.eventData() !== null);
+  protected userBookings = signal<GetBookingDto[]>([]);
 
   protected dateFilter = signal<string>('');
   protected availabilityFilter = signal<string>('all');
@@ -93,6 +94,11 @@ export class Dashboard {
     });
 
     this.fetchEvents();
+    if (!this.isAdmin) {
+      this.http.get<GetBookingDto[]>('/bookings/user').subscribe((bookings) => {
+        this.userBookings.set(bookings);
+      });
+    }
   }
 
   private fetchEvents(category?: EventCategory) {

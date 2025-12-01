@@ -79,6 +79,7 @@
   @for (event of paginatedEvents(); track event.id) {
   <app-event-card
     [eventData]="event"
+    [userBookings]="userBookings()"
     (eventBooked)="onEventBooked()"
     (isEditing)="onEditEvent($event)"
   ></app-event-card>
@@ -123,6 +124,7 @@
   @for (event of unavailableEvents(); track event.id) {
   <app-event-card
     [eventData]="event"
+    [userBookings]="userBookings()"
     (eventBooked)="onEventBooked()"
     (isEditing)="onEditEvent($event)"
     [unavailable]="true"

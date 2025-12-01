@@ -31,17 +31,9 @@ export class EventCard {
   protected readonly bookingError = signal<string | null>(null);
   protected readonly selectedSeats = signal<number>(1);
   protected readonly isAdmin = this.authService.getUserRole().toLowerCase() === 'admin';
-  protected readonly userBookings = signal<GetBookingDto[]>([]);
+  readonly userBookings = input<GetBookingDto[]>([]);
   isEditing = output<GetEventDto>();
   unavailable = input<boolean>(false);
-
-  constructor() {
-    if (!this.isAdmin) {
-      this.bookingsService.getUserBookings().subscribe((bookings) => {
-        this.userBookings.set(bookings);
-      });
-    }
-  }
 
   protected readonly hasAlreadyBooked = computed(() => {
     return this.bookingsService.hasUserBookedEvent(this.eventData().id, this.userBookings());
