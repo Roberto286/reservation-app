@@ -14,6 +14,12 @@ import { AuthStateService } from '../../core/services/auth-state.service';
 import { BookingsService } from '../../core/services/bookings.service';
 import { Button } from '../button/button';
 
+// Formatter statico condiviso per tutte le istanze
+const dateFormatter = new Intl.DateTimeFormat('it-IT', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+});
+
 @Component({
   selector: 'app-event-card',
   standalone: true,
@@ -48,15 +54,10 @@ export class EventCard {
 
   protected readonly eventDates = computed(() => {
     const eventValue = this.eventData();
-    const formatter = new Intl.DateTimeFormat('it-IT', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
-
     return {
-      start: formatter.format(new Date(eventValue.startAt)),
-      end: formatter.format(new Date(eventValue.endAt)),
-      updatedAt: formatter.format(new Date(eventValue.updatedAt)),
+      start: dateFormatter.format(new Date(eventValue.startAt)),
+      end: dateFormatter.format(new Date(eventValue.endAt)),
+      updatedAt: dateFormatter.format(new Date(eventValue.updatedAt)),
     };
   });
 
@@ -87,13 +88,6 @@ export class EventCard {
     return description.length > maxLength
       ? description.substring(0, maxLength) + '...'
       : description;
-  });
-
-  protected readonly placeholderImage = computed(() => {
-    // Usa l'ID dell'evento per generare un seed numerico consistente
-    const id = this.eventData().id;
-    const seed = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return `https://picsum.photos/seed/${seed}/300/200`;
   });
 
   protected readonly canBook = computed(

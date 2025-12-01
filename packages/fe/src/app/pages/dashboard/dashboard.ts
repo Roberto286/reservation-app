@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EventCategory, GetBookingDto, GetEventDto, GetEventsDto } from '@reservation-app/shared';
 import { Button } from '../../components/button/button';
@@ -16,6 +16,7 @@ import { AuthStateService } from '../../core/services/auth-state.service';
   templateUrl: './dashboard.html',
   styles: [],
   imports: [EventsMenu, Button, Modal, EventForm, CommonModule, EventCard, FormsModule, Paginator],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {
   private readonly http = inject(HttpClient);
@@ -132,6 +133,12 @@ export class Dashboard {
 
   onEventBooked() {
     this.fetchEvents();
+    // Ricarica le userBookings dopo una prenotazione
+    if (!this.isAdmin) {
+      this.http.get<GetBookingDto[]>('/bookings/user').subscribe((bookings) => {
+        this.userBookings.set(bookings);
+      });
+    }
   }
 
   onEditEvent($event: GetEventDto) {
