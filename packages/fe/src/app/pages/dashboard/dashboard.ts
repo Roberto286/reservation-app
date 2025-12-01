@@ -79,7 +79,10 @@ export class Dashboard {
   });
 
   protected totalPages = computed(() => {
-    return Math.ceil(this.filteredEvents().length / this.itemsPerPage());
+    const filtered = this.filteredEvents().length;
+    const perPage = this.itemsPerPage();
+    if (filtered === 0 || perPage === 0) return 1;
+    return Math.ceil(filtered / perPage);
   });
 
   unavailableEvents = signal<GetEventsDto>([]);
